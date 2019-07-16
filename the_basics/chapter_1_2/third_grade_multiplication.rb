@@ -96,11 +96,13 @@ def n_sum(n)
   return sum_numbers(n_sum(n.push(result)), sum_numbers(sum_0, sum_1, 0), 0)
 end
 
-num1 = 1234
-num2 = 5678
+
+num1 = 3141592653589793238462643383279502884197169399375105820974944592
+num2 = 2718281828459045235360287471352662497757247093699959574966967627
 
 p n_result = third_grade_mutiplication(num1, num2)
 
-num1 * num2
+
+p n_result == num1 * num2
 
 #  cleannig up code movint to Clas version

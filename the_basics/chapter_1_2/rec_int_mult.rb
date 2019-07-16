@@ -51,8 +51,12 @@ def my_pow(x, pow, count = 1)
    return my_pow(x, pow, count) * x
 end
 
-num1 = 1234
-num2 = 5678
-p rec_int_mult(num2, num1)
-p num1 * num2
+m = 3141592653589793238462643383279502884197169399375105820974944592
+n = 2718281828459045235360287471352662497757247093699959574966967627
+
+p n * m
+
+p n_result = rec_int_mult(n, m)
+
+p n_result == n * m
 
