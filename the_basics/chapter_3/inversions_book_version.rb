@@ -24,105 +24,71 @@
 # Output: the number of inversions
 #
 
-def merge_count_inversions(a)
+def sort_count(a)
   length_a = a[:array].length
 
-  return {array: a[:array], inversions: 0} if length_a == 1
+  return {array: a[:array], inversions: 0}  if length_a == 1
 
   new_array = divide(a[:array], length_a/2)
 
-  half_1 = new_array.shift
-  half_2 = new_array
+  half_left = new_array.shift
+  half_rigth = new_array
 
-  #sort_count_left   = sort_count(a, a.length / 2)
-  #sort_count_rigth  = sort_count(a, a.length / 2)
-  #merge_split_count = merge_split_count(sort_count_left[:array], sort_count_rigth[:array])
-  #merge_split_count  = merge_split_count(half_1, half_2)
- # result =
-  #
-  return merge_split_count(merge_count_inversions({array: half_1, inversions: a[:inversions_count]}),merge_count_inversions({array: half_2, inversions: a[:inversions_count]}))
-   # merge_split_count[:array],
-   # sort_count_left[:inversions],
-   # sort_count_rigth[:inversions],
-#
- #  merge_split_count[:inversions]
+  sort_count_left   = sort_count({array: half_left})
+  sort_count_rigth  = sort_count({array: half_rigth})
+  p sort_count_left
+  p  hola =      merge_split_count(sort_count_left, sort_count_rigth)
+
+  inversions = sort_count_left[:inversions] + sort_count_rigth[:inversions] + hola[:inversions]
+
+  return {array: hola[:array], inversions: inversions}
+  # {
+  #   array:     [12] ,
+  #   inversions: 1
+  #    # ( sort_count_left[:inversions]
+  #    #  + sort_count_rigth[:inversions]
+  #    #  + hola[:inversions])
+  # }
 end
 
 
-def merge_split_count(half_1, half_2)
-  length = half_1[:array].length
+def merge_split_count(half_left, half_rigth)
+  p half_left
+  length = half_left[:array].length
 
   i = 0
   j = 0
 
+  result = {array: [], inversions: 0}
 
-  result = {array: [], inversions: half_1[:inversions] + half_2[:inversions]}
-p  result
   (2*length).times do |index|
     if i > length - 1
-      result[:array][index] = half_2[:array][j]
+      result[:array][index] = half_rigth[:array][j]
 
       next j += 1
     end
 
     if j > length - 1
-      result[:array][index]  = half_1[:array][i]
+      result[:array][index]  = half_left[:array][i]
 
       next i += 1
     end
 
-    if half_1[:array][i] < half_2[:array][j]
-      result[:array][index] = half_1[:array][i]
+    if half_left[:array][i] < half_rigth[:array][j]
+      result[:array][index] = half_left[:array][i]
 
       i += 1
     else
-      result[:array][index] = half_2[:array][j]
-p length - i + 1
+      p half_rigth
+      result[:array][index] = half_rigth[:array][j]
       result[:inversions]  +=  length - i
 
       j += 1
     end
   end
- p result
+  p result
   result
 end
-
-# def merge_split_count(half_1, half_2)
-#   length = half_1.length
-#
-#   i = 0
-#   j = 0
-#
-#   result = {array: [], inversions: 0}
-#
-#   (2*length).times do |index|
-#     if i > length - 1
-#       result[:array][index] = half_2[j]
-#
-#       next j += 1
-#     end
-#
-#     if j > length - 1
-#       result[:array][index]        = half_1[i]
-#       result[:inversions] += length - i + 1
-#
-#       next i += 1
-#     end
-#
-#     if half_1[i] < half_2[j]
-#       result[:array][index] = half_1[i]
-#
-#       i += 1
-#     else
-#       result[:array][index] = half_2[j]
-#
-#       j += 1
-#     end
-#   end
-#
-#   result
-# end
-
 
 def divide(a, n)
   second_half_element = a.pop
@@ -133,14 +99,9 @@ def divide(a, n)
 end
 
 a0 = [4,3,2,1,8,7,6,5]
-a = [1,2,3,4,5,7,9,8].shuffle
+a  = [1,2,3,4,5,7,9,8].shuffle
 a1 = (1..8).map{|i| i}.reverse
-b = [7,4]
+b  = [7,4]
+c  = [4,3,2,1]
 
-c = [4,3,2,1]
-
-def sum(a,b)
-  return a+b, a-b
-end
-
-p merge_count_inversions({array: a1, inversions: 0})
+p sort_count({array: a1, inversions: 0})
