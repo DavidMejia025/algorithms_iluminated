@@ -14,11 +14,6 @@
 #
 # output: a matrix Z  Z = [ [z_{1,1},.., z_{1,n}], [z_{2,1},.., b_{2,n}], ...,  [b_{n,1},.., b_{n,n}]]
 #
-
-
-
-
-
 def matrix_multiplication_brute_force(a, b)
   matrix_length = a.length
 
@@ -58,44 +53,43 @@ p matrix_multiplication_brute_force(a,b)
 # account is that an nxn matrix can be splited into 4 n/4 x n/4 matrices, and this porces can be done until you get a 2x2
 # matrix that requires 8 operations each.
 #
-#
-#
 
 def matrix_multiplication(a, b)
-  matrix_length = a.length
-   p "---"
- p a
- p b
- p "---"
-
-  # return matrix_multiplication_2x2(a, b)  if matrix_length == 1
-  return [a[0][0] * b[0][0]]  if matrix_length == 1
+  return a[0][0] * b[0][0] if matrix_length == 1
 
   a_splited = split_matrix(a, matrix_length)
   b_splited = split_matrix(b, matrix_length)
 
-  new_matrix_a = [a_splited[0], a_splited[1], a_splited[2], a_splited[3]]
-  new_matrix_b = [b_splited[0], b_splited[1], b_splited[2], b_splited[3]]
-p new_matrix_a
-p   matrix_multiplication(a_splited[0], b_splited[0]) + matrix_multiplication(a_splited[1], b_splited[2])
-  result = [
-    matrix_multiplication(a_splited[0], b_splited[0]) + matrix_multiplication(a_splited[1], b_splited[2]),
-    matrix_multiplication(a_splited[0], b_splited[1]) + matrix_multiplication(a_splited[1], b_splited[3]),
-    matrix_multiplication(a_splited[2], b_splited[0]) + matrix_multiplication(a_splited[3], b_splited[1]),
-    matrix_multiplication(a_splited[2], b_splited[1]) + matrix_multiplication(a_splited[3], b_splited[3]),
-  ]
-
-  return result
+ result = (
+   [
+     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[1]))],
+     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))],
+     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[1]))],
+     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))]
+   ]
+  )
 end
 
-def matrix_multiplication_2x2(x,y)
 
-  x_11 = x[0][0] * y[0][0] +  x[0][1] * y[1][0]
-  x_12 = x[0][0] * y[0][1] +  x[0][1] * y[1][1]
-  x_21 = x[1][0] * y[0][0] +  x[1][1] * y[1][0]
-  x_22 = x[1][0] * y[0][1] +  x[1][1] * y[1][1]
+def matrix_sum(x,y)
+  return x + y if x.class == Fixnum
 
-  [[x_11], [x_12], [x_21], [x_22]]
+  length_x   = x.length
+  length_x_i = x[0].length
+
+  result   = []
+  sum      = []
+
+  for k in 0..length_x - 1 do
+   for j in 0..length_x_i - 1 do
+     sum.push(x[k][j] + y[k][j])
+   end
+   result.push(sum)
+
+   sum = []
+  end
+
+  return result
 end
 
 def split_matrix(x, length)
@@ -116,10 +110,13 @@ def split_matrix(x, length)
   return result
 end
 
+a2 = [[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2] ]
+b2 = [[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3] ]
 a  = [[2,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,2,2]]
 b  = [[3,3,3,3],[3,3,3,3],[3,3,3,3],[3,3,3,3]]
 a0 = [[2,2], [2,2]]
 b0 = [[3,3], [3,3]]
+a1 = [[6, 6], [6, 6], [6, 6], [6, 6]]
+b1 = [[6, 6], [6, 6], [6, 6], [6, 6]]
 
-p matrix_multiplication(a, b)
-p matrix_multiplication(a0, b0)
+p matrix_multiplication(a2, b2)
