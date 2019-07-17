@@ -55,6 +55,8 @@ p matrix_multiplication_brute_force(a,b)
 #
 
 def matrix_multiplication(a, b)
+  matrix_length = a.length
+
   return a[0][0] * b[0][0] if matrix_length == 1
 
   a_splited = split_matrix(a, matrix_length)
@@ -62,10 +64,10 @@ def matrix_multiplication(a, b)
 
  result = (
    [
-     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[1]))],
-     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))],
-     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[1]))],
-     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))]
+     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[1]))].flatten,
+     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))].flatten,
+     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[1]))].flatten,
+     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))].flatten
    ]
   )
 end
@@ -118,5 +120,16 @@ a0 = [[2,2], [2,2]]
 b0 = [[3,3], [3,3]]
 a1 = [[6, 6], [6, 6], [6, 6], [6, 6]]
 b1 = [[6, 6], [6, 6], [6, 6], [6, 6]]
+a3 = []
+16.times {|i| a3.push([2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2])}
+b3 = []
+16.times {|i| b3.push([3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3])}
 
-p matrix_multiplication(a2, b2)
+p r = matrix_multiplication(a, b)
+p r.length
+p r0 = matrix_multiplication(a0,b0)
+p r0[0].length
+p r2 = matrix_multiplication(a2,b2)
+p r2[0].length
+p r3 = matrix_multiplication(a3,b3)
+p r3[0].length
