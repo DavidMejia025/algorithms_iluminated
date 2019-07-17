@@ -62,16 +62,47 @@ def matrix_multiplication(a, b)
   a_splited = split_matrix(a, matrix_length)
   b_splited = split_matrix(b, matrix_length)
 
- result = (
-   [
-     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[1]))].flatten,
-     [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))].flatten,
-     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[1]))].flatten,
-     [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))].flatten
-   ]
-  )
+
+result = (
+  [
+    [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[1]))].flatten +
+    [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))].flatten +
+    [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[1]))].flatten +
+    [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))].flatten
+  ]
+ )
+
+result = build(result[0],result[0].length)
+#result = (
+#  [
+#    [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[1]))].flatten,
+#    [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))].flatten,
+#    [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[1]))].flatten,
+#    [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))].flatten
+#  ]
+# )
+
+
 end
 
+def build(n, length_n)
+    n_x_n = []
+    row   = []
+    k     = 0
+
+ for i in 0..(length_n ** (0.5) - 1)
+   for j in 0..(length_n ** (0.5) - 1)
+        row.push(n[k])
+
+        k += 1
+      end
+      n_x_n.push(row)
+
+      row = []
+    end
+
+    n_x_n
+end
 
 def matrix_sum(x,y)
   return x + y if x.class == Fixnum
@@ -125,11 +156,11 @@ a3 = []
 b3 = []
 16.times {|i| b3.push([3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3])}
 
-p r = matrix_multiplication(a, b)
-p r.length
-p r0 = matrix_multiplication(a0,b0)
-p r0[0].length
+p  r = matrix_multiplication(a, b)
+ rr = build(r[0], r[0].length)
+p  r0 = matrix_multiplication(a0,b0)
+  rr0 = build(r0[0],r0[0].length)
 p r2 = matrix_multiplication(a2,b2)
-p r2[0].length
+  rr2 = build(r2[0],r2[0].length)
 p r3 = matrix_multiplication(a3,b3)
-p r3[0].length
+  rr3 = build(r3[0],r3[0].length)
