@@ -54,27 +54,35 @@ matrix_multiplication_brute_force(a,b)
 # matrix that requires 8 operations each.
 #
 
-def matrix_multiplication(a, b)
+def rec_matrix_multiplication(a, b)
   matrix_length = a.length
 
-  return a[0][0] * b[0][0] if matrix_length == 1
+  return a[0] * b[0] if matrix_length == 1
 
   a_splited = split_matrix(a, matrix_length)
   b_splited = split_matrix(b, matrix_length)
 
+  a_b_1 = [matrix_sum(rec_matrix_multiplication(a_splited[0], b_splited[0]), rec_matrix_multiplication(a_splited[1], b_splited[2]))].flatten
+  a_b_2 = [matrix_sum(rec_matrix_multiplication(a_splited[0], b_splited[1]), rec_matrix_multiplication(a_splited[1], b_splited[3]))].flatten
+  a_b_3 = [matrix_sum(rec_matrix_multiplication(a_splited[2], b_splited[0]), rec_matrix_multiplication(a_splited[3], b_splited[2]))].flatten
+  a_b_4 = [matrix_sum(rec_matrix_multiplication(a_splited[2], b_splited[1]), rec_matrix_multiplication(a_splited[3], b_splited[3]))].flatten
 
- result = (
-  [
-    [matrix_sum(matrix_multiplication(a_splited[0], b_splited[0]), matrix_multiplication(a_splited[1], b_splited[2]))] +
-    [matrix_sum(matrix_multiplication(a_splited[0], b_splited[1]), matrix_multiplication(a_splited[1], b_splited[3]))] +
-    [matrix_sum(matrix_multiplication(a_splited[2], b_splited[0]), matrix_multiplication(a_splited[3], b_splited[2]))] +
-    [matrix_sum(matrix_multiplication(a_splited[2], b_splited[1]), matrix_multiplication(a_splited[3], b_splited[3]))]
-  ]
- )
-p"middle"
- #result = build(result[0], result[0].length)
-p "finish"
-result
+  row_length = a_b_1.count
+
+  if row_length == 1
+    result = [ [a_b_1[0],  a_b_2[0],  a_b_3[0] , a_b_4[0]] ]
+  else
+    result = (
+      [
+        a_b_1[0..(row_length / 2) - 1] + a_b_2[0..(row_length / 2) - 1] +
+        a_b_1[(row_length / 2).. - 1]  + a_b_2[(row_length / 2).. - 1]  +
+        a_b_3[0..(row_length / 2) - 1] + a_b_4[0..(row_length / 2) - 1] +
+        a_b_3[(row_length / 2).. - 1]  + a_b_4[(row_length / 2).. - 1]
+      ]
+    )
+  end
+
+  build(result[0], result[0].length)
 end
 
 def build(n, length_n)
@@ -82,19 +90,19 @@ def build(n, length_n)
     row   = []
     k     = 0
 
- for i in 0..(length_n ** (0.5) - 1)
-   for j in 0..(length_n ** (0.5) - 1)
-     row.push(n[k])
+    for i in 0..(length_n ** (0.5) - 1)
+      for j in 0..(length_n ** (0.5) - 1)
+        number = n.shift
+        row.push(number)
+      end
+      n_x_n.push(row)
 
-     k += 1
-   end
-   n_x_n.push(row)
+      row = []
+    end
 
-   row = []
- end
-
- n_x_n
+    n_x_n
 end
+
 
 def matrix_sum(x,y)
   return x + y if x.class == Fixnum
@@ -106,112 +114,288 @@ def matrix_sum(x,y)
   sum      = []
 
   for k in 0..length_x - 1 do
-   for j in 0..length_x_i - 1 do
-     sum.push(x[k][j] + y[k][j])
-   end
-   result.push(sum)
+    for j in 0..length_x_i - 1 do
+      sum.push(x[k][j] + y[k][j])
+    end
 
-   sum = []
+    result.push(sum)
+
+    sum = []
   end
 
-  return result
+  result
 end
 
 def split_matrix(x, length)
   middle_length  = length / 2
 
-  upper_matrices = x[0..middle_length -1]
-  lower_matrices = x[middle_length..-1]
+  upper_matrices = x[0..middle_length - 1]
+  lower_matrices = x[middle_length.. - 1]
 
   result = [[],[], [], []]
-p "row"
-p x
-p upper_matrices
-p lower_matrices
-p "111"
-# middle_length.times do |row|
-#  p "3"
-#  p row
-#  p  result[0].push(upper_matrices[row][0..middle_length -1])
-#  p result[1].push(upper_matrices[row][middle_length..-1])
-#  p result[2].push(lower_matrices[row][0..middle_length -1])
-#  p  result[3].push(lower_matrices[row][middle_length..-1])
-#  p"4"
-# end
 
+  if upper_matrices.length == 1
+    result[0].push(upper_matrices[0][0])
+    result[1].push(upper_matrices[0][1])
+    result[2].push(lower_matrices[0][0])
+    result[3].push(lower_matrices[0][1])
 
-   if upper_matrices.length == 1
-     result_2 = [[],[]]
-     p "end"
-     result_2[0].push(upper_matrices[0]
-     result_2[1].push(lower_matrices[1]
-     result_2[2].push(lower_matrices[0]
-     result_2[3].push(lower_matrices[1]
-     return result_2
-   end
+    return result
+  end
 
-  result_2 = [[],[],[],[]]
+  result[0].push(upper_matrices[0][0..middle_length -1]).push(upper_matrices[1][0..middle_length -1])
+  result[1].push(upper_matrices[0][middle_length..-1]).push(upper_matrices[1][middle_length..-1])
+  result[2].push(lower_matrices[0][0..middle_length -1]).push(lower_matrices[1][0..middle_length -1])
+  result[3].push(lower_matrices[0][middle_length..-1]).push(lower_matrices[1][middle_length..-1])
 
-  result_2[0].push(upper_matrices[0][0..middle_length -1]).push(upper_matrices[0][middle_length..-1])
-  result_2[1].push(upper_matrices[1][0..middle_length -1]).push(upper_matrices[1][middle_length..-1])
-  result_2[2].push(lower_matrices[0][0..middle_length -1]).push(lower_matrices[0][middle_length..-1])
-  result_2[3].push(lower_matrices[1][0..middle_length -1]).push(lower_matrices[1][middle_length..-1])
-
-p "result_2"
-p result_2
-  return result_2
+  return result
 end
 
-a2 = [[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2] ]
-b2 = [[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3] ]
-a  = [[1,1,1,1],[3,3,3,3],[5,5,5,5],[7,7,7,7]]
-b  = [[2,2,2,2],[4,4,4,4],[6,6,6,6],[8,8,8,8]]
-a0 = [[2,2], [2,2]]
-b0 = [[3,3], [3,3]]
-a1 = [[6, 6,6,6], [6, 6,6,6], [6, 6,6,6], [4,4,4,4]]
-b1 = [[4, 4,4,4], [6, 6,6,6], [6, 6,6,6], [6, 6,6,6]]
-a3 = []
-16.times {|i| a3.push([2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2])}
-b3 = []
-16.times {|i| b3.push([3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3])}
-
-# r = matrix_multiplication(a, a)
-# rr = build(r[0], r[0].length)
-#
-# r = matrix_multiplication(b1,b1)
-# r0 = matrix_multiplication(a0,b0)
-# r2 = matrix_multiplication(a2,b2)
-# r3 = matrix_multiplication(a3,b3)
-test_2_a = [[1,2],[3,4]]
-test_2_b = [[5,6],[7,8]]
-
-# matrix_multiplication(test_2_a, test_2_b)
-p matrix_multiplication(a, b)
-
-p split_matrix(a1, 4)
  # Once the recursion multiplication is done again the key question emerges again, Can we do better?. And the answer is yes, taking into
  # accout the previeus experience with the two n digit integeres multiplication where a math trick from a gauss expressin helped Karatsuma
  # to improve that algoritm, Prof strassen also came out with an tricky aproach to recursively solve the matrix multiplication problem.
  # In this case the algorithm will split the original matrix in 4th matrices but the equation to conquer the solution will be as follows:
  #
- #
+
+  def strassen_matrix_multiplication(a, b)
+    matrix_length = a.length
+
+    return a[0] * b[0] if matrix_length == 1
+
+    a_splited = split_matrix(a, matrix_length)
+    b_splited = split_matrix(b, matrix_length)
+
+    p1 = calculate_p1(a_splited, b_splited)
+    p p1 
+
+    p2 = calculate_p2(a_splited, b_splited)
+    p p2
+    p3 = calculate_p3(a_splited, b_splited)
+    p p3
+        return true
+    p4 = calculate_p4(a_splited, b_splited)
+    p5 = calculate_p5(a_splited, b_splited)
+    p6 = calculate_p6(a_splited, b_splited)
+    p7 = calculate_p7(a_splited, b_splited)
+   
+    a_b_1 = [matrix_sum(matrix_sum(p5, p4), matrix_sum((-1 * p2), p6))].flatten
+    a_b_2 = [matrix_sum(p1, p2)].flatten
+    a_b_3 = [matrix_sum(p3, p4)].flatten
+    a_b_4 = [matrix_sum(matrix_sum(p1, p5), matrix_sum((-1 * p3), (-1 * p7)))].flatten
+
+    row_length = a_b_1.count
+
+    if row_length == 1
+      result = [ [a_b_1[0],  a_b_2[0],  a_b_3[0] , a_b_4[0]] ]
+    else
+      result = (
+        [
+          a_b_1[0..(row_length / 2) - 1] + a_b_2[0..(row_length / 2) - 1] +
+          a_b_1[(row_length / 2).. - 1]  + a_b_2[(row_length / 2).. - 1]  +
+          a_b_3[0..(row_length / 2) - 1] + a_b_4[0..(row_length / 2) - 1] +
+          a_b_3[(row_length / 2).. - 1]  + a_b_4[(row_length / 2).. - 1]
+        ]
+      )
+    end
+
+    build(result[0], result[0].length)
+  end
+
+  def build(n, length_n)
+      n_x_n = []
+      row   = []
+      k     = 0
+
+      for i in 0..(length_n ** (0.5) - 1)
+        for j in 0..(length_n ** (0.5) - 1)
+          number = n.shift
+          row.push(number)
+        end
+        n_x_n.push(row)
+
+        row = []
+      end
+
+      n_x_n
+  end
+
+
+  def matrix_sum(x,y)
+    return x + y if x.class == Fixnum
+
+    length_x   = x.length
+    length_x_i = x[0].length
+
+    result   = []
+    sum      = []
+
+    for k in 0..length_x - 1 do
+      for j in 0..length_x_i - 1 do
+        sum.push(x[k][j] + y[k][j])
+      end
+
+      result.push(sum)
+
+      sum = []
+    end
+
+    result
+  end
+
+  def split_matrix(x, length)
+    middle_length  = length / 2
+
+    upper_matrices = x[0..middle_length - 1]
+    lower_matrices = x[middle_length.. - 1]
+
+    result = [[],[], [], []]
+
+    if upper_matrices.length == 1
+      result[0].push(upper_matrices[0][0])
+      result[1].push(upper_matrices[0][1])
+      result[2].push(lower_matrices[0][0])
+      result[3].push(lower_matrices[0][1])
+
+      return result
+    end
+
+    result[0].push(upper_matrices[0][0..middle_length -1]).push(upper_matrices[1][0..middle_length -1])
+    result[1].push(upper_matrices[0][middle_length..-1]).push(upper_matrices[1][middle_length..-1])
+    result[2].push(lower_matrices[0][0..middle_length -1]).push(lower_matrices[1][0..middle_length -1])
+    result[3].push(lower_matrices[0][middle_length..-1]).push(lower_matrices[1][middle_length..-1])
+
+    return result
+  end
+
+# a_splited = [[a] [b] [c] [d]] 
+# b_splited = [[e] [f] [g] [h]] 
+# How to handle properly the base case when  a, b ,c ,d are numbers
+  def calculate_p1(a, b) 
+    p a 
+    p a[0]
+    return [a[0][0] * (b[1][0] - b[3][0])] if a[0].length == 1
+
+    [matrix_multiplication(a[0], matrix_sum(b[1], minus_n_x_n(b[3])))]
+  end
+
+  def calculate_p2(a, b)
+    return [(a[0][0] + a[1][0]) * b[3][0]]  if a[0].length == 1
+
+    [matrix_multiplication(matrix_sum(a[0], (a[1])), b[3])]
+  end
+
+  def calculate_p3(a, b)
+    return [(a[2][0] + a[3][0]) * b[0][0]] if a[0].length == 1
+
+    [matrix_multiplication(matrix_sum(a[2], (a[3])), b[0])]
+  end
+ 
+  def calculate_p4(a, b)
+    return [] if a[0].length == 1
+
+    [matrix_multiplication(a[3], matrix_sum(b[2], minus_n_x_n(b[0])))]
+  end
+
+  def calculate_p5(a, b)
+    return [] if a[0].length == 1
+    
+    [matrix_multiplication(matrix_sum(a[0], (a[3])), matrix_sum(b[0], (b[3])))]
+  end
+
+  def calculate_p6(a, b)
+    return [] if a[0].length == 1
+    
+    [matrix_multiplication(matrix_sum(a[1], minus_n_x_n(a[3])), matrix_sum(g[2], (h[3])))]
+  end
+
+  def calculate_p7(a, b)
+    return [] if a[0].length == 1
+    
+    [matrix_multiplication(matrix_sum(a[0], minus_n_x_n(a[2])), matrix_sum(b[0], (b[1])))]
+  end
+
+  def minus_n_x_n(a)
+    return -1 * a[0] if a[0].class == Fixnum
+    
+    if a[0].length == 1
+      a.each_index {|num, index| a[index] = -1 * a[index] } 
+    else
+      a.each_with_index do |row, row_index|
+        row.each_with_index {|num, num_index| a[row_index][num_index] = -1 * a[row_index][num_index] }
+      end
+    end  
+    a
+  end
+
 #a2 = [[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2] ]
 #b2 = [[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3] ]
 #a  = [[1,1,1,1],[3,3,3,3],[5,5,5,5],[7,7,7,7]]
 #b  = [[2,2,2,2],[4,4,4,4],[6,6,6,6],[8,8,8,8]]
-#a0 = [[2,2], [2,2]]
-#b0 = [[3,3], [3,3]]
-#a1 = [[6, 6,6,6], [6, 6,6,6], [6, 6,6,6], [4,4,4,4]]
-#b1 = [[4, 4,4,4], [6, 6,6,6], [6, 6,6,6], [6, 6,6,6]]
-#a3 = []
-#16.times {|i| a3.push([2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2])}
-#b3 = []
-#16.times {|i| b3.push([3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3])}
 #
-# r = matrix_multiplication(a, a)
-# rr = build(r[0], r[0].length)
-#
-# r = matrix_multiplication(b1,b1)
-# r0 = matrix_multiplication(a0,b0)
-# r2 = matrix_multiplication(a2,b2)
-# r3 = matrix_multiplication(a3,b3)
+# 2X2 Matrices examples:
+a = [[2,2],[1,1]]
+b = [[2,2],[1,1]]
+ rec_matrix_multiplication(a,b)
+p strassen_matrix_multiplication(a,b)
+# a = [[2,2],[1,1]]
+# b = [[1,1],[2,2]]
+# p matrix_multiplication(a,b)
+# a = [[1,2],[2,1]]
+# b = [[1,2],[2,1]]
+# p matrix_multiplication(a,b)
+# a = [[2,1],[1,2]]
+# b = [[2,1],[1,2]]
+# p matrix_multiplication(a,b)
+# a = [[3,3],[3,3]]
+# b = [[2,2],[2,2]]
+# p matrix_multiplication(a,b)
+# a = [[1,4],[4,1]]
+# b = [[1,5],[5,1]]
+# p  matrix_multiplication(a,b)
+# a = [[4,1],[1,4]];
+# b = [[5,1],[1,5]];
+# p matrix_multiplication(a,b)
+# a = [[9,9],[9,4]];
+# b = [[8,7],[6,5]];
+# p matrix_multiplication(a,b)
+# a = [[1,1,1,1],[3,3,3,3],[2,2,2,2],[4,4,4,4]];
+# b = [[5,5,5,5],[6,6,6,6],[7,7,7,7],[8,8,8,8]];
+# p matrix_multiplication(a,b)
+
+# 4x4 Matrices examples:
+# a = [[1,1,1,1],[1,1,1,1],[2,2,2,2],[2,2,2,2]];
+# b = [[2,2,2,2],[2,2,2,2],[1,1,1,1],[1,1,1,1]];
+# p matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[2,2,2,2],[2,2,2,2],[1,1,1,1],[1,1,1,1]];
+# b = [[1,1,1,1],[1,1,1,1],[2,2,2,2],[2,2,2,2]];
+# p matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[1,1,1,1],[2,2,2,2],[2,2,2,2],[1,1,1,1]];
+# b = [[1,1,1,1],[2,2,2,2],[2,2,2,2],[1,1,1,1]];
+# p matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[2,2,2,2],[1,1,1,1],[1,1,1,1],[2,2,2,2]];
+# b = [[2,2,2,2],[1,1,1,1],[1,1,1,1],[2,2,2,2]];
+# p matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[3,3,3,3],[3,3,3,3],[3,3,3,3],[3,3,3,3]];
+# b = [[2,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,2,2]];
+# p matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[1,1,1,1],[4,4,4,4],[4,4,4,4],[1,1,1,1]];
+# b = [[1,1,1,1],[5,5,5,5],[5,5,5,5],[1,1,1,1]];
+# p  matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[1,1,1,1],[1,1,1,1],[4,4,4,4],[5,5,5,5]];
+# b = [[4,4,4,4],[5,5,5,5],[1,1,1,1],[1,1,1,1]];
+# p  matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# a = [[9,9,9,9],[9,9,9,9],[9,9,9,9],[4,4,4,4]];
+# b = [[8,8,8,8],[7,7,7,7],[6,6,6,6],[5,5,5,5]];
+# a = [[1,1,1,1],[3,3,3,3],[2,2,2,2],[4,4,4,4]];
+# b = [[5,5,5,5],[6,6,6,6],[7,7,7,7],[8,8,8,8]];
+# p matrix_multiplication(a,b)
+# p matrix_multiplication_brute_force(a,b)
+# p matrix_multiplication(a, b)
+#  p split_matrix(b, 4)
