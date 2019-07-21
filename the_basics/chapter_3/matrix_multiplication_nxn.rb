@@ -158,16 +158,20 @@ end
  #
 
   def strassen_matrix_multiplication(a, b)
-    matrix_length = a.length
-
-    if matrix_length > 1
-      a_splited = split_matrix(a, matrix_length)
-      b_splited = split_matrix(b, matrix_length)
+# p "a"
+# p a
+# p b
+# p "b"
+    if a.length > 1
+      a_splited = split_matrix(a, a.length)
+      b_splited = split_matrix(b, a.length)
     else
       a_splited = a.map {|item| item[0]}
       b_splited = b.map {|item| item[0]}
     end
-
+# p "splited"   
+# p a_splited 
+# p b_splited 
     p1 = calculate_p1(a_splited, b_splited)
     p2 = calculate_p2(a_splited, b_splited)
     p3 = calculate_p3(a_splited, b_splited)
@@ -188,16 +192,25 @@ end
 
       return [[a_b_1,  a_b_2],  [a_b_3 , a_b_4]]
     else
-    # p a_b_1 = [matrix_sum(matrix_sum(p5, p4), matrix_sum((-1 * p2), p6))].flatten
-    # p a_b_2 = [matrix_sum(p1, p2)].flatten
-    # p a_b_3 = [matrix_sum(p3, p4)].flatten
-    # p a_b_4 = [matrix_sum(matrix_sum(p1, p5), matrix_sum((-1 * p3), (-1 * p7)))].flatten
-      # [
-      #   a_b_1[0..(row_length / 2) - 1] + a_b_2[0..(row_length / 2) - 1] +
-      #   a_b_1[(row_length / 2).. - 1]  + a_b_2[(row_length / 2).. - 1]  +
-      #   a_b_3[0..(row_length / 2) - 1] + a_b_4[0..(row_length / 2) - 1] +
-      #   a_b_3[(row_length / 2).. - 1]  + a_b_4[(row_length / 2).. - 1]
-      # ]
+      #p "begin"
+       # p p1[0]
+       # p p2[0]
+       # p p3[0]
+       # p p4[0]
+      # p ""
+      a_b_1 = [matrix_sum(matrix_sum(p5[0], p4[0]), matrix_sum(minus_n_x_n(p2[0]), p6[0]))].flatten
+      a_b_2 = [matrix_sum(p1[0], p2[0])].flatten
+      a_b_3 = [matrix_sum(p3[0], p4[0])].flatten
+      a_b_4 = [matrix_sum(matrix_sum(p1[0], p5[0]), matrix_sum(minus_n_x_n(p3[0]), minus_n_x_n(p7[0])))].flatten
+      #p "end"
+      row_length = a_b_1.length
+
+      [
+        a_b_1[0..(row_length / 2) - 1] + a_b_2[0..(row_length / 2) - 1] +
+        a_b_1[(row_length / 2).. - 1]  + a_b_2[(row_length / 2).. - 1]  +
+        a_b_3[0..(row_length / 2) - 1] + a_b_4[0..(row_length / 2) - 1] +
+        a_b_3[(row_length / 2).. - 1]  + a_b_4[(row_length / 2).. - 1]
+      ]
     end
   end
 
@@ -211,8 +224,8 @@ end
           number = n.shift
           row.push(number)
         end
-        n_x_n.push(row)
 
+        n_x_n.push(row)
         row = []
       end
 
@@ -235,7 +248,6 @@ end
       end
 
       result.push(sum)
-
       sum = []
     end
 
@@ -276,46 +288,45 @@ end
 
   def calculate_p1(a, b) 
     return [a[0][0] * (b[1][0] - b[3][0])] if is_2x2_matrix?(a)
-p a 
-p b
-    [rec_matrix_multiplication(a[0], matrix_sum(b[1], minus_n_x_n(b[3])))]
+
+    [strassen_matrix_multiplication(a[0], matrix_sum(b[1], minus_n_x_n(b[3])))]
   end
 
   def calculate_p2(a, b)
     return [(a[0][0] + a[1][0]) * b[3][0]]  if is_2x2_matrix?(a)
 
-    [rec_matrix_multiplication(matrix_sum(a[0], (a[1])), b[3])]
+    [strassen_matrix_multiplication(matrix_sum(a[0], (a[1])), b[3])]
   end
 
   def calculate_p3(a, b)
     return [(a[2][0] + a[3][0]) * b[0][0]] if is_2x2_matrix?(a)
 
-    [rec_matrix_multiplication(matrix_sum(a[2], (a[3])), b[0])]
+    [strassen_matrix_multiplication(matrix_sum(a[2], (a[3])), b[0])]
   end
 
   def calculate_p4(a, b)
     return [a[3][0] * (b[2][0] + minus_n_x_n(b[0][0]))] if is_2x2_matrix?(a)
     
-    [rec_matrix_multiplication(a[3], matrix_sum(b[2], minus_n_x_n(b[0])))]
+    [strassen_matrix_multiplication(a[3], matrix_sum(b[2], minus_n_x_n(b[0])))]
   end
 
   def calculate_p5(a, b)
     return [(a[0][0] + a[3][0]) * (b[0][0] + b[3][0])] if is_2x2_matrix?(a)
     
-    [rec_matrix_multiplication(matrix_sum(a[0], (a[3])), matrix_sum(b[0], (b[3])))]
+    [strassen_matrix_multiplication(matrix_sum(a[0], (a[3])), matrix_sum(b[0], (b[3])))]
   end
  
 
   def calculate_p6(a, b)
     return [(a[1][0] + (-1 * a[3][0])) * (b[2][0] + b[3][0])]  if is_2x2_matrix?(a)
     
-    [rec_matrix_multiplication(matrix_sum(a[1], minus_n_x_n(a[3])), matrix_sum(b[2], (b[3])))]
+    [strassen_matrix_multiplication(matrix_sum(a[1], minus_n_x_n(a[3])), matrix_sum(b[2], (b[3])))]
   end
 
   def calculate_p7(a, b)
     return [(a[0][0] + (-1 * a[2][0])) * (b[0][0] + b[1][0])]  if is_2x2_matrix?(a)
     
-    [rec_matrix_multiplication(matrix_sum(a[0], minus_n_x_n(a[2])), matrix_sum(b[0], (b[1])))]
+    [strassen_matrix_multiplication(matrix_sum(a[0], minus_n_x_n(a[2])), matrix_sum(b[0], (b[1])))]
   end
 
   def minus_n_x_n(a)
@@ -337,10 +348,10 @@ p b
 #b  = [[2,2,2,2],[4,4,4,4],[6,6,6,6],[8,8,8,8]]
 #
 # 2X2 Matrices examples:
- # a = [[2,2],[1,1]]
- # b = [[2,2],[1,1]]
- # p rec_matrix_multiplication(a,b)
- # p strassen_matrix_multiplication(a,b)
+  # a = [[2,2],[1,1]]
+  # b = [[2,2],[1,1]]
+  # p rec_matrix_multiplication(a,b)
+  # p strassen_matrix_multiplication(a,b)
  # a = [[2,2],[1,1]]
  # b = [[1,1],[2,2]]
  # p rec_matrix_multiplication(a,b)
@@ -373,48 +384,56 @@ p b
 # p matrix_multiplication(a,b)
 
 # 4x4 Matrices examples:
-# a = [[1,1,1,1],[1,1,1,1],[2,2,2,2],[2,2,2,2]];
-# b = [[2,2,2,2],[2,2,2,2],[1,1,1,1],[1,1,1,1]];
-# p matrix_multiplication_brute_force(a,b)
- #rec_matrix_multiplication(a,b)
-# strassen_matrix_multiplication(a,b)
-# a = [[2,2,2,2],[2,2,2,2],[1,1,1,1],[1,1,1,1]];
-# b = [[1,1,1,1],[1,1,1,1],[2,2,2,2],[2,2,2,2]];
-# p matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# a = [[1,1,1,1],[2,2,2,2],[2,2,2,2],[1,1,1,1]];
-# b = [[1,1,1,1],[2,2,2,2],[2,2,2,2],[1,1,1,1]];
-# p matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# a = [[2,2,2,2],[1,1,1,1],[1,1,1,1],[2,2,2,2]];
-# b = [[2,2,2,2],[1,1,1,1],[1,1,1,1],[2,2,2,2]];
-# p matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# a = [[3,3,3,3],[3,3,3,3],[3,3,3,3],[3,3,3,3]];
-# b = [[2,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,2,2]];
-# p matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# a = [[1,1,1,1],[4,4,4,4],[4,4,4,4],[1,1,1,1]];
-# b = [[1,1,1,1],[5,5,5,5],[5,5,5,5],[1,1,1,1]];
-# p  matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# a = [[1,1,1,1],[1,1,1,1],[4,4,4,4],[5,5,5,5]];
-# b = [[4,4,4,4],[5,5,5,5],[1,1,1,1],[1,1,1,1]];
-# p  matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# a = [[9,9,9,9],[9,9,9,9],[9,9,9,9],[4,4,4,4]];
-# b = [[8,8,8,8],[7,7,7,7],[6,6,6,6],[5,5,5,5]];
-# a = [[1,1,1,1],[3,3,3,3],[2,2,2,2],[4,4,4,4]];
-# b = [[5,5,5,5],[6,6,6,6],[7,7,7,7],[8,8,8,8]];
-# p matrix_multiplication(a,b)
-# p matrix_multiplication_brute_force(a,b)
-# p matrix_multiplication(a, b)
-#  p split_matrix(b, 4)
- # a = [ [[1, 1], [1, 1]], [[3, 3], [3, 3]], [[2, 2], [2, 2]], [[4, 4], [4, 4]] ];
- # b = [ [[5, 5], [5, 5]], [[6, 6], [6, 6]], [[7, 7], [7, 7]], [[8, 8], [8, 8]] ];
-a  = [[[1, 1], [1, 1]], [[1, 1], [1, 1]], [[2, 2], [2, 2]], [[2, 2], [2, 2]]]
-b  = [[[2, 2], [2, 2]], [[2, 2], [2, 2]], [[1, 1], [1, 1]], [[1, 1], [1, 1]]]
- # a = [[ 1, 3], [2, 4]];
- # b = [[ 5, 6], [7, 8]];
- p calculate_p1(a, b) 
- #p strassen_matrix_multiplication(a, b)
+a = [[1,1,1,1],[1,1,1,1],[2,2,2,2],[2,2,2,2]];
+b = [[2,2,2,2],[2,2,2,2],[1,1,1,1],[1,1,1,1]];
+#p matrix_multiplication_brute_force(a,b)
+p rec_matrix_multiplication(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[2,2,2,2],[2,2,2,2],[1,1,1,1],[1,1,1,1]];
+b = [[1,1,1,1],[1,1,1,1],[2,2,2,2],[2,2,2,2]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[1,1,1,1],[2,2,2,2],[2,2,2,2],[1,1,1,1]];
+b = [[1,1,1,1],[2,2,2,2],[2,2,2,2],[1,1,1,1]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[2,2,2,2],[1,1,1,1],[1,1,1,1],[2,2,2,2]];
+b = [[2,2,2,2],[1,1,1,1],[1,1,1,1],[2,2,2,2]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[3,3,3,3],[3,3,3,3],[3,3,3,3],[3,3,3,3]];
+b = [[2,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,2,2]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[1,1,1,1],[4,4,4,4],[4,4,4,4],[1,1,1,1]];
+b = [[1,1,1,1],[5,5,5,5],[5,5,5,5],[1,1,1,1]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[1,1,1,1],[1,1,1,1],[4,4,4,4],[5,5,5,5]];
+b = [[4,4,4,4],[5,5,5,5],[1,1,1,1],[1,1,1,1]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[9,9,9,9],[9,9,9,9],[9,9,9,9],[4,4,4,4]];
+b = [[8,8,8,8],[7,7,7,7],[6,6,6,6],[5,5,5,5]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
+p "next"
+a = [[1,1,1,1],[3,3,3,3],[2,2,2,2],[4,4,4,4]];
+b = [[5,5,5,5],[6,6,6,6],[7,7,7,7],[8,8,8,8]];
+p rec_matrix_multiplication(a,b)
+#p matrix_multiplication_brute_force(a,b)
+p strassen_matrix_multiplication(a,b)
