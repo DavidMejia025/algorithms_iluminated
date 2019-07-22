@@ -192,25 +192,21 @@ end
 
       return [[a_b_1,  a_b_2],  [a_b_3 , a_b_4]]
     else
-      #p "begin"
-       # p p1[0]
-       # p p2[0]
-       # p p3[0]
-       # p p4[0]
-      # p ""
       a_b_1 = [matrix_sum(matrix_sum(p5[0], p4[0]), matrix_sum(minus_n_x_n(p2[0]), p6[0]))].flatten
       a_b_2 = [matrix_sum(p1[0], p2[0])].flatten
       a_b_3 = [matrix_sum(p3[0], p4[0])].flatten
       a_b_4 = [matrix_sum(matrix_sum(p1[0], p5[0]), matrix_sum(minus_n_x_n(p3[0]), minus_n_x_n(p7[0])))].flatten
-      #p "end"
+
       row_length = a_b_1.length
 
-      [
+      new_matrix = [
         a_b_1[0..(row_length / 2) - 1] + a_b_2[0..(row_length / 2) - 1] +
         a_b_1[(row_length / 2).. - 1]  + a_b_2[(row_length / 2).. - 1]  +
         a_b_3[0..(row_length / 2) - 1] + a_b_4[0..(row_length / 2) - 1] +
         a_b_3[(row_length / 2).. - 1]  + a_b_4[(row_length / 2).. - 1]
       ]
+
+      build(new_matrix[0], new_matrix[0].length)
     end
   end
 
@@ -282,64 +278,68 @@ end
 # a_splited = [[a] [b] [c] [d]] 
 # b_splited = [[e] [f] [g] [h]] 
 # How to handle properly the base case when  a, b ,c ,d are numbers
-  def is_2x2_matrix?(a)
+  def is_1xn_matrix?(a)
     a[0].length == 1
   end
 
   def calculate_p1(a, b) 
-    return [a[0][0] * (b[1][0] - b[3][0])] if is_2x2_matrix?(a)
+    return [a[0][0] * (b[1][0] - b[3][0])] if is_1xn_matrix?(a)
 
     [strassen_matrix_multiplication(a[0], matrix_sum(b[1], minus_n_x_n(b[3])))]
   end
 
   def calculate_p2(a, b)
-    return [(a[0][0] + a[1][0]) * b[3][0]]  if is_2x2_matrix?(a)
+    return [(a[0][0] + a[1][0]) * b[3][0]]  if is_1xn_matrix?(a)
 
     [strassen_matrix_multiplication(matrix_sum(a[0], (a[1])), b[3])]
   end
 
   def calculate_p3(a, b)
-    return [(a[2][0] + a[3][0]) * b[0][0]] if is_2x2_matrix?(a)
+    return [(a[2][0] + a[3][0]) * b[0][0]] if is_1xn_matrix?(a)
 
     [strassen_matrix_multiplication(matrix_sum(a[2], (a[3])), b[0])]
   end
 
   def calculate_p4(a, b)
-    return [a[3][0] * (b[2][0] + minus_n_x_n(b[0][0]))] if is_2x2_matrix?(a)
-    
+    return [a[3][0] * (b[2][0] + minus_n_x_n(b[0][0]))] if is_1xn_matrix?(a)
+
     [strassen_matrix_multiplication(a[3], matrix_sum(b[2], minus_n_x_n(b[0])))]
   end
 
   def calculate_p5(a, b)
-    return [(a[0][0] + a[3][0]) * (b[0][0] + b[3][0])] if is_2x2_matrix?(a)
-    
+    return [(a[0][0] + a[3][0]) * (b[0][0] + b[3][0])] if is_1xn_matrix?(a)
+
     [strassen_matrix_multiplication(matrix_sum(a[0], (a[3])), matrix_sum(b[0], (b[3])))]
   end
  
 
   def calculate_p6(a, b)
-    return [(a[1][0] + (-1 * a[3][0])) * (b[2][0] + b[3][0])]  if is_2x2_matrix?(a)
+    return [(a[1][0] + (-1 * a[3][0])) * (b[2][0] + b[3][0])]  if is_1xn_matrix?(a)
     
     [strassen_matrix_multiplication(matrix_sum(a[1], minus_n_x_n(a[3])), matrix_sum(b[2], (b[3])))]
   end
 
   def calculate_p7(a, b)
-    return [(a[0][0] + (-1 * a[2][0])) * (b[0][0] + b[1][0])]  if is_2x2_matrix?(a)
-    
+    return [(a[0][0] + (-1 * a[2][0])) * (b[0][0] + b[1][0])]  if is_1xn_matrix?(a)
+
     [strassen_matrix_multiplication(matrix_sum(a[0], minus_n_x_n(a[2])), matrix_sum(b[0], (b[1])))]
   end
 
   def minus_n_x_n(a)
     return -1 * a if a[0].class == Fixnum
 
-    if is_2x2_matrix?(a)
-      a.each_index {|num, index| a[index] = -1 * a[index] } 
+    if is_1xn_matrix?(a)
+      result = []
+      result = a.each_index {|num, index| result[index] = -1 * a[index] }
+
     else
+      result = [[],[]]
       a.each_with_index do |row, row_index|
-        row.each_with_index {|num, num_index| a[row_index][num_index] = -1 * a[row_index][num_index] }
+        row.each_with_index {|num, num_index| result[row_index][num_index] = -1 * a[row_index][num_index] }
       end
-    end  
-    a
+    end
+
+    result
   end
 
 #a2 = [[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2] ]
