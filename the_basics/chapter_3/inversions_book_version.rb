@@ -112,9 +112,10 @@ book_test =
     49689,
     9083
    ]
+d = [0, 3, 1, 5, 2, 7, 6, 4]
 
 sorted_array = (1..16).map{|element| element}.reverse
-array = book_test
+array = d
 
 p "theorical num of inversions"
 p array.length * ((array.length) -1) / 2

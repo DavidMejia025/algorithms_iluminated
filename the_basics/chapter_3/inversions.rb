@@ -23,6 +23,9 @@
 # Input:  array A of n digits
 # Output: the number of inversions
 #
+# additional references:
+# 1. https://www.geeksforgeeks.org/counting-inversions/
+# 2. https://www.hackerrank.com/challenges/ctci-merge-sort/problem
 
 def merge_count_inversions(a)
   return {array: a[:array], inversions: 0} if a[:array].length == 1
