@@ -36,24 +36,15 @@ def sort_count(a)
 
   sort_count_left   = sort_count({array: half_left})
   sort_count_rigth  = sort_count({array: half_rigth})
-  p sort_count_left
-  p  hola =      merge_split_count(sort_count_left, sort_count_rigth)
-
+  hola =      merge_split_count(sort_count_left, sort_count_rigth)
   inversions = sort_count_left[:inversions] + sort_count_rigth[:inversions] + hola[:inversions]
 
   return {array: hola[:array], inversions: inversions}
-  # {
-  #   array:     [12] ,
-  #   inversions: 1
-  #    # ( sort_count_left[:inversions]
-  #    #  + sort_count_rigth[:inversions]
-  #    #  + hola[:inversions])
-  # }
 end
 
 
 def merge_split_count(half_left, half_rigth)
-  p half_left
+  half_left
   length = half_left[:array].length
 
   i = 0
@@ -79,14 +70,13 @@ def merge_split_count(half_left, half_rigth)
 
       i += 1
     else
-      p half_rigth
+      half_rigth
       result[:array][index] = half_rigth[:array][j]
       result[:inversions]  +=  length - i
 
       j += 1
     end
   end
-  p result
   result
 end
 
@@ -103,5 +93,32 @@ a  = [1,2,3,4,5,7,9,8].shuffle
 a1 = (1..8).map{|i| i}.reverse
 b  = [7,4]
 c  = [4,3,2,1]
+book_test =
+  [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    54044,
+    14108,
+    79294,
+    29649,
+    25260,
+    60660,
+    2995,
+    53777,
+    49689,
+    9083
+   ]
 
-p sort_count({array: a1, inversions: 0})
+sorted_array = (1..16).map{|element| element}.reverse
+array = book_test
+
+p "theorical num of inversions"
+p array.length * ((array.length) -1) / 2
+p "111"
+p array
+p result =  sort_count({array: array, inversions: 0})
+p result[:array]

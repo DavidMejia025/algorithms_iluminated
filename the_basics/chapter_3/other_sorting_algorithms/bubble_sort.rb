@@ -1,6 +1,6 @@
 # As famous as Obama knows that this Bubble sort ("sorting by exchange) is not the rigth way to sort an array [1], it
-# is a fancy way to perform the sorting in O(n^2) but as bad as brute force (the only advantage is
-# its memory performance O(1) and is good when n is significantly low such as n < 50).
+# is a fancy way to perform the sorting in O(n^2) but as bad as brute force. The only advantage is
+# its memory performance O(1) and is good when n is significantly low such as n < 50 [2].
 #
 # Procedure: This algorith looks if for a given element a[i] (of an array a of n elements) the next
 # element a[i+1] is grater. If so then it swaps the elements, else do nothing and continue with the
@@ -10,7 +10,7 @@
 #
 # References:
 # 1. https://www.youtube.com/watch?v=k4RRi_ntQc8
-# https://users.cs.duke.edu/~ola/bubble/bubble.html
+# 2. https://users.cs.duke.edu/~ola/bubble/bubble.html
 #
 #
 
