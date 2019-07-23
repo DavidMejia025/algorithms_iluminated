@@ -8,6 +8,9 @@
 # the algorithm will take one element in the wrong order and will put it in the rigth place.
 # For a completely unsorted array the full task will take n/2 times n elements.
 #
+# input:  a n element array (A)
+# output: an array with all the elements of A sorted
+#
 # References:
 # 1. https://www.youtube.com/watch?v=k4RRi_ntQc8
 # 2. https://users.cs.duke.edu/~ola/bubble/bubble.html

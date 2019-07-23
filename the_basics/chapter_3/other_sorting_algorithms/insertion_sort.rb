@@ -1,4 +1,13 @@
-# Insertion sort:
+# Insertion sort:i
+#
+# The insertion sort is a common algorithm  that emulates the natural way in which humans
+# sort things like a deck of cards. This algorithm improves the bubble sort and the selection
+# sort eventhough its running time is O(n^2) as well. In comparison to the bubble sort, insertion sort
+# do not swap elements reducing the amount of work of taking an element in the possition i to the position
+# i + x where x is the final destination. On the other hand insertion sort improves slection sort in average time
+# due to this sorting algorithm is not looking for a particular element such as the minimum avoiding to
+# pass through the elements of the initial array in this case only the first element of the base array
+# is taken and then compared with the remaining elements in the new array.
 #
 # input: a n element array (A)
 # output: an array with all the elements of A sorted
@@ -14,7 +23,12 @@
 #           grater than left element and lower that next right
 #           element.
 #
-#
+# References:
+# 1. Algorithms to Live By: The Computer Science of Human Decisions
+#      Brian Christian, Tom Griffith
+#      Henry Holt and Co., Inc. New York, NY, USA ©2016
+#      ISBN:1627790365 9781627790369
+# 2.https://www.hackerearth.com/practice/algorithms/sorting/insertion-sort/tutorial/
 def inversion_sort(a)
   new_array = []
   i         = 0
@@ -31,9 +45,8 @@ def inversion_sort(a)
       if shifted_element < new_array[j]
         break new_array.insert(j, shifted_element)
       end
-      if j == (new_array.length) -1
-        new_array.push(shifted_element)
-      end
+
+      new_array.push(shifted_element) if j == (new_array.length) -1
     end
 
     i += 1
@@ -44,7 +57,8 @@ end
 
 def reverse_array(a)
   limit = a.length
-  sum = 0
+  sum   = 0
+
   for i in 0..((limit / 2) - 1) do
     left_index  = i
     rigth_index = -1-i
@@ -55,10 +69,10 @@ def reverse_array(a)
 
     sum = 1 if i == 0
   end
+
   a
 end
 
 a  = (1..100).map{|element| element| element}.shuffle
-p "start"
 p a
 p inversion_sort(a)
