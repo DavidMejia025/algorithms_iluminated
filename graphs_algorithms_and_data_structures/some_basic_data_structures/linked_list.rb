@@ -2,72 +2,158 @@
 # each  vertex can have maximum two connections, and all the nodes are
 # connected "in-line" .
 class LinkedList
-  def initialize(*element)
-    @stack = []
-
-    self.add(element[0]) unless element == []
+  def initialize
+    @root    = nil
+    @current = nil
   end
 
-  def show
-    @stack
+  def current
+    @current
   end
 
-  def add(element)
-    @stack.push(element)
+  def root
+    @root
   end
 
-  def remove
-    @stack.pop
+  def add(val)
+    if @root == nil
+      n_new    = Node.new(val,nil)
+
+      @current = n_new
+      @root    = n_new
+    else
+      n_new    = Node.new(val, @current)
+      @current = n_new
+    end
   end
 
-  def find(element)
-    result = @stack.find {|node| node == element }
+  def addAt(pos, val)
+    return false if pos < 0 || pos > self.size
 
-    !result.nil?
+    return self.add(val) if pos == self.size
+
+    if pos == 0
+      n_new     = Node.new(val,nil)
+      @root.ref = n_new
+      @root     = n_new
+    else
+      node          = find_node_by_pos(self.current, pos, self.size - 1)
+      new_node_prev = find_node_by_pos(self.current, pos - 1, self.size - 1)
+
+      n_new    = Node.new(val, new_node_prev)
+      node.ref = n_new
+     end
   end
 
-  def count
-    @stack.length
+  def replaceAt(pos, val)
+    length = self.size
+    return false if pos - 1 > length
+
+    node = find_node_by_pos(self.current, pos, length - 1)
+
+    node.val = val
+  end
+
+  def valueAt(pos)
+    find_node_by_pos(self.current, pos, (self.size) - 1).val
+  end
+
+  def removeAt(pos)
+    return false if pos < 0 || pos > self.size - 1
+
+    return self.pop if pos == 0
+
+    if pos == self.size - 1
+      poped    = @current.val
+      @current = @current.ref
+    else
+      pop_node      = find_node_by_pos(self.current, pos, length - 1)
+      pop_node_next = find_node_by_pos(self.current, pos + 1, length - 1)
+
+      pop_node_next.ref = pop_node_prev
+      pop_node.ref      = nil
+      poped             = pop_node.val
+    end
+
+    return poped
+  end
+
+  def find_node_by_pos(node, pos, num)
+    return node if num == pos
+
+    return find_node_by_pos(node.ref, pos, num -= 1)
+  end
+
+  def pop
+    node_n_1 = find_n_1(self.current)
+
+    pop   = @root.val
+p @root
+    @root = node_n_1
+p @root
+    @root.ref = nil
+
+    pop
+  end
+
+  def find_n_1(node)
+   return node  if node.ref == @root
+
+   return find_n_1(node.ref)
+  end
+
+  def size
+    return 0 if self.current == nil
+
+    node = self.current
+
+    count(node)
+  end
+
+  def count(node)
+    return 1 if node.ref == nil
+
+    return count(node.ref) + 1
   end
 end
 
-#TDD
-p "create stack empty"
-q1 = LinkedList.new()
-p valid = q1.show == []
-  if valid == false
-p   q1.show
-  end
-p "create stack with one element"
-q1 = LinkedList.new(1)
-p valid = q1.show == [1]
-  if valid == false
-p   q1.show
-  end
-p "add one element to the stackr"
-q1.add(2)
-p q1.show == [1,2]
-p "remove one element from the stack"
-q1.remove
-p q1.show == [1]
-p "could not find one element in the stack"
-p valid = !q1.find(0)
-  if valid == false
-p   q1.show
-  end
-p "could find one element in the stack"
-p valid = q1.find(1)
-  if valid == false
-p   q1.show
-  end
-p "count elements in stack"
-p valid = q1.count == 1
-  if valid == false
-    p    q1.show
+class Node
+  def initialize(val, ref)
+    @val = val
+    @ref = ref
   end
 
-#add 3 elements#
-#  remove one element
-#  add two more elements
-#  remove one element
-#  search some element
+  def val=(val)
+    @val = val
+  end
+
+  def val
+    @val
+  end
+
+  def ref=(ref)
+    @ref = ref
+  end
+
+  def ref
+    @ref
+  end
+end
+
+list = LinkedList.new();
+list.add('a');
+list.add('b');
+list.add('d');
+p "1111111111"
+p list
+list.addAt(2, 'c');
+p list
+p "!!!!"
+p list.valueAt(0); #// 'a'
+
+# list.forEach((val, i) => {
+#   console.log(`Value at position ${i}: ${val}`);
+# });
+#
+p list.removeAt(0);
+p list
