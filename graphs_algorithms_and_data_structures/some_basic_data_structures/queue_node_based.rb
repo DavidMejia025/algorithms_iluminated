@@ -1,9 +1,10 @@
 #Implement stack based in node structure
 #
 #
-class Stack
+class Queue
   def initialize
-    @root = nil
+    @root    = nil
+    @current = nil
   end
 
   def current
@@ -20,7 +21,6 @@ class Stack
 
       @current = n_new
       @root    = n_new
-
     else
       n_new    = Node.new(val, @current)
       @current  = n_new
@@ -28,14 +28,25 @@ class Stack
   end
 
   def pop
-    pop      = @current.val
-    @current = @current.ref
+    node_n_1 = find_n_1(self.current)
+
+    pop   = @root.val
+p @root
+    @root = node_n_1
+p @root
+    @root.ref = nil
 
     pop
   end
 
+  def find_n_1(node)
+   return node  if node.ref == @root
+
+   return find_n_1(node.ref)
+  end
+
   def size
-    return 0 if self.root == nil
+    return 0 if self.current == nil
 
     node = self.current
 
@@ -72,7 +83,7 @@ class Node
   end
 end
 
-s = Stack.new()
+s = Queue.new()
 p s.size
 p s.add(33)
 p s.add(10)
@@ -81,7 +92,10 @@ p s.add(8)
 p s.add(75)
 p s.root
 p s.size
+p s
+p "-----"
 p s.pop
 p s.pop
 p s.current
 p s.root
+p s
