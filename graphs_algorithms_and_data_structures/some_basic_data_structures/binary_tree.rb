@@ -1,10 +1,8 @@
-# LinkedList data structucture that can be seen as a unidirectional graph where
-# each  vertex can have maximum two connections, and all the nodes are
-# connected "in-line" .
+# Binary tree node implementation plus BFS and DFS
+#
+#
 class BinaryTree
-  attr_accessor :root
   def initialize
-
     @root = nil
   end
 
@@ -17,9 +15,12 @@ class BinaryTree
 
       parent.add(n_new)
     end
+    n_new
   end
 
   def find_leave(node, queue)
+    return node if node.l_ref.nil? || node.r_ref.nil?
+
     queue.push(node.l_ref) unless node.l_ref.nil?
     queue.push(node.r_ref) unless node.r_ref.nil?
 
@@ -28,8 +29,27 @@ class BinaryTree
 
       return find_leave(next_node, queue)
     end
+  end
 
-    return node
+  def dfs_tree
+    inner_dfs(@root, [], [])
+  end
+
+  def inner_dfs(node, dfs, stack)
+    dfs.push(node.val)
+
+    stack.push(node.r_ref) unless node.r_ref.nil?
+
+    stack.push(node.l_ref) unless node.l_ref.nil?
+
+    while !stack.empty?
+
+      next_node = stack.pop
+
+      return inner_dfs(next_node, dfs, stack)
+    end
+
+    return dfs
   end
 
   def bfs_tree
@@ -51,12 +71,31 @@ class BinaryTree
     return bfs
   end
 
+  def find_last_leave
+    inner_bfs_node(@root, [], [])
+  end
+
+  def inner_bfs_node(node, bfs, queue)
+    bfs.push(node.val)
+
+    queue.push(node.l_ref) unless node.l_ref.nil?
+    queue.push(node.r_ref) unless node.r_ref.nil?
+
+    while !queue.empty?
+      next_node = queue.shift
+
+      return inner_bfs_node(next_node, bfs, queue)
+    end
+
+    return node
+  end
+
   def valueAt(pos)
     find_node_by_pos(self.current, pos, (self.size) - 1).val
   end
 
   def remove
-    leave  = find_leave(@root, [])
+    leave  = find_last_leave
 
     parent = leave.p_ref
 
@@ -121,22 +160,20 @@ class B_tree_node
 end
 
 b_tree = BinaryTree.new()
-
+p "start"
  b_tree.add(4)
-p b_tree.root
-p b_tree.bfs_tree
+ b_tree.root
+ b_tree.bfs_tree
 p "!!!"
-b_tree.add(2)
-p b_tree
-p b_tree.bfs_tree
-p b_tree.root
+ b_tree.add(2)
+ b_tree.root
+ b_tree.bfs_tree
  b_tree.add(7)
-p b_tree
-p b_tree.bfs_tree
-p b_tree.root
+ b_tree.root
+ b_tree.bfs_tree
 p "?????????"
  b_tree.add(1)
-p b_tree
+ b_tree
 p " !!!!!!!!!!!!!!!! "
  b_tree.add(3)
 p b_tree.bfs_tree
@@ -145,10 +182,20 @@ p " 22!!!!!!!!!!!!!!!! "
 p " !!!!!!!!!!!!!!!! "
  b_tree.add(6)
 p " $$$$"
-p b_tree
+# b_tree
+# b_tree.bfs_tree
+# b_tree.remove
+# b_tree
+# b_tree.bfs_tree
 p b_tree.bfs_tree
-p b_tree.remove
-p b_tree
+p "dfs"
+p b_tree.dfs_tree
+# b_tree.remove
+# b_tree.remove
+# b_tree.remove
+ b_tree.remove
 p b_tree.bfs_tree
-p " @@@"
+p b_tree.dfs_tree
+ b_tree.remove
 p b_tree.bfs_tree
+p b_tree.dfs_tree
