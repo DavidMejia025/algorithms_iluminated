@@ -31,6 +31,18 @@ class BinaryTree
     end
   end
 
+  def dfs_tree_rec(*node)
+    node.empty? ? node = @root : node = node[0]
+
+    return [node.val] if node.l_ref.nil? && node.r_ref.nil?
+
+    left_side  = node.l_ref ? dfs_tree_rec(node.l_ref) : []
+    rigth_side = node.r_ref ? dfs_tree_rec(node.r_ref) : []
+
+    return (rigth_side + left_side + [node.val]).reverse if node == @root
+    return (rigth_side + left_side + [node.val])
+  end
+
   def dfs_tree
     inner_dfs(@root, [], [])
   end
@@ -39,7 +51,6 @@ class BinaryTree
     dfs.push(node.val)
 
     stack.push(node.r_ref) unless node.r_ref.nil?
-
     stack.push(node.l_ref) unless node.l_ref.nil?
 
     while !stack.empty?
@@ -162,14 +173,11 @@ end
 b_tree = BinaryTree.new()
 p "start"
  b_tree.add(4)
- b_tree.root
  b_tree.bfs_tree
 p "!!!"
  b_tree.add(2)
- b_tree.root
  b_tree.bfs_tree
  b_tree.add(7)
- b_tree.root
  b_tree.bfs_tree
 p "?????????"
  b_tree.add(1)
@@ -199,3 +207,5 @@ p b_tree.dfs_tree
  b_tree.remove
 p b_tree.bfs_tree
 p b_tree.dfs_tree
+p "dfs rec"
+p b_tree.dfs_tree_rec
