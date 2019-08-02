@@ -94,12 +94,6 @@ b         = [7,4]
 c         = [4,3,2,1]
 book_test =
   [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
     54044,
     14108,
     79294,
@@ -111,11 +105,44 @@ book_test =
     49689,
     9083
    ]
-sorted_array = (1..10).map{|element| element}.reverse
-
-array = book_test
+# sorted_array = (1..5).map{|element| element}.reverse
+sorted_array = book_test
+p sorted_array.count
+num          = sorted_array.count
+base         = Math.log(num,2).to_f.ceil
+dif          = (2 ** base) - num
+#sorted_array = sorted_array.sort
+add_zeros    = (1..dif).map{|z| -z}.reverse
+p sorted_array
+sorted_array =  add_zeros+sorted_array
+#sorted_array +=  add_zeros
+p sorted_array
+p array = sorted_array
+p array.count
 p "theorical num of inversions"
 p array.length * ((array.length) -1) / 2
 
-p merge_count_inversions({array: book_test, inversions: 0})
 p merge_count_inversions({array: array, inversions: 0})
+
+my_file = File.open("inversions_test.txt")
+array = my_file.map do |li|
+  li.gsub("\n","").to_i
+end
+
+p "Reat test"
+p num        = array.count
+base         = Math.log(num,2).to_f.ceil
+dif          = (2 ** base) - num
+#sorted_array = sorted_array.sort
+add_zeros    = (1..dif).map{|z| -z}.reverse
+
+array =  add_zeros + array
+#sorted_array +=  add_zeros
+ array.count
+ "theorical num of inversions"
+p array.length * ((array.length) -1) / 2
+
+p "real test result"
+p Math.log(array.count,2)
+ merge_count_inversions({array: array, inversions: 0})
+

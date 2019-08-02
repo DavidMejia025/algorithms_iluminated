@@ -114,12 +114,27 @@ book_test =
    ]
 d = [0, 3, 1, 5, 2, 7, 6, 4]
 
-sorted_array = (1..16).map{|element| element}.reverse
-array = d
+my_file = File.open("inversions_test.txt")
+array = my_file.map do |li|
+  li.gsub("\n","").to_i
+end
 
-p "theorical num of inversions"
+
+array = 19999.times.map{|t| t}.reverse
+p "Reat test"
+p num        = array.count
+base         = Math.log(num,2).to_f.ceil
+dif          = (2 ** base) - num
+#sorted_array = sorted_array.sort
+add_zeros    = (1..dif).map{|z| -z}.reverse
+
+array =  add_zeros + array
+#sorted_array +=  add_zeros
+ array.count
+ "theorical num of inversions"
 p array.length * ((array.length) -1) / 2
-p "111"
-p array
-p result =  sort_count({array: array, inversions: 0})
-p result[:array]
+
+p "real test result"
+p Math.log(array.count,2)
+ sort_count({array: array, inversions: 0})
+
