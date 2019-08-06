@@ -24,83 +24,74 @@
 # Output: the number of inversions
 #
 
-def sort_count(a)
-  length_a = a[:array].length
+def sort_count(a, inversions)
+  length_a = a.length
 
-  return {array: a[:array], inversions: 0}  if length_a == 1
+  return  a, 0  if length_a == 1
 
-  new_array = divide(a[:array], length_a/2)
+  half_left, half_rigth = divide(a, length_a / 2)
 
-  half_left = new_array.shift
-  half_rigth = new_array
+  half_left,  left_count  = sort_count(half_left, inversions)
+  half_rigth, rigth_count = sort_count(half_rigth, inversions)
 
-  sort_count_left   = sort_count({array: half_left})
-  sort_count_rigth  = sort_count({array: half_rigth})
-  hola =      merge_split_count(sort_count_left, sort_count_rigth)
-  inversions = sort_count_left[:inversions] + sort_count_rigth[:inversions] + hola[:inversions]
+  array, split_count = merge_split_count(half_left, half_rigth)
 
-  return {array: hola[:array], inversions: inversions}
+  inversions = left_count + rigth_count + split_count
+
+  return array, inversions
 end
 
 
 def merge_split_count(half_left, half_rigth)
-  half_left
-  length = half_left[:array].length
+  length_left  = half_left.length
+  length_rigth = half_rigth.length
+  length       = length_left + length_rigth
+
+  array      = []
+  inversions = 0
 
   i = 0
   j = 0
 
-  result = {array: [], inversions: 0}
-
-  (2*length).times do |index|
-    if i > length - 1
-      result[:array][index] = half_rigth[:array][j]
+  length.times do |index|
+    if i > length_left - 1
+      array[index] = half_rigth[j]
 
       next j += 1
     end
 
-    if j > length - 1
-      result[:array][index]  = half_left[:array][i]
+    if j > length_rigth - 1
+      array[index]  = half_left[i]
 
       next i += 1
     end
 
-    if half_left[:array][i] < half_rigth[:array][j]
-      result[:array][index] = half_left[:array][i]
+    if half_left[i] < half_rigth[j]
+      array[index] = half_left[i]
 
       i += 1
     else
-      half_rigth
-      result[:array][index] = half_rigth[:array][j]
-      result[:inversions]  +=  length - i
+      array[index] = half_rigth[j]
+      inversions  +=  length_left - i
 
       j += 1
     end
   end
-  result
+
+  return array, inversions
 end
 
 def divide(a, n)
-  second_half_element = a.pop
-
-  return [a].push(second_half_element) if a.length == n + 0
-
-  return divide(a, n).push(second_half_element)
+  return a[0..(n-1)], a[n..-1]
 end
 
 a0 = [4,3,2,1,8,7,6,5]
 a  = [1,2,3,4,5,7,9,8].shuffle
-a1 = (1..8).map{|i| i}.reverse
+a1 = (1..3).map{|i| i}.reverse
 b  = [7,4]
 c  = [4,3,2,1]
 book_test =
   [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
     54044,
     14108,
     79294,
@@ -119,22 +110,4 @@ array = my_file.map do |li|
   li.gsub("\n","").to_i
 end
 
-
-array = 19999.times.map{|t| t}.reverse
-p "Reat test"
-p num        = array.count
-base         = Math.log(num,2).to_f.ceil
-dif          = (2 ** base) - num
-#sorted_array = sorted_array.sort
-add_zeros    = (1..dif).map{|z| -z}.reverse
-
-array =  add_zeros + array
-#sorted_array +=  add_zeros
- array.count
- "theorical num of inversions"
-p array.length * ((array.length) -1) / 2
-
-p "real test result"
-p Math.log(array.count,2)
- sort_count({array: array, inversions: 0})
-
+p sort_count(array, 0)[1]
