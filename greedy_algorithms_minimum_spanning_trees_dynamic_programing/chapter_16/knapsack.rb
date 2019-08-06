@@ -34,17 +34,23 @@ def pick_v(capacity, v, w)
    v
   return [0,0] if v.empty?
 
-  v_max = v.map{|val| val[0]}.max
+  w_min = v.map{|val| val[1]}.min
 
-  candidates = v.select{|val| val[0] == v_max}
+  candidates = v.select{|val| val[1] == w_min}
 
-  w_min = candidates.map{|val| val[1]}.min
+  v_max = candidates.map{|val| val[0]}.max
+
+ # v_max = v.map{|val| val[0]}.max
+ #
+ # candidates = v.select{|val| val[0] == v_max}
+ #
+ # w_min = candidates.map{|val| val[1]}.min
 
   if (capacity - w - w_min) >= 0
     p candidates
-    state_i = candidates.select{|state| state[1] == w_min}
+    state_i = candidates.select{|state| state[0] == v_max}
   else
-    v.reject!{|val| val[0] == v_max}
+    v.reject!{|val| val[1] == w_min}
 
     return pick_v(capacity, v, w)
   end
@@ -72,23 +78,32 @@ file = File.open("knapsack_test0.txt")
 # = file.map{|ver| ver.gsub(" ",",").gsub("\n", "").split(",").reduce(&:to_i)}
 v = file.map{|ver| ver.gsub("\n", "").split(" ").map(&:to_i)}
 p v.length
-puts v.sort
-p new_v = v.sort[1..5]
-capacity = 0
-p new_v[0][1]
-p new_v.each{|val| capacity += val[1]}
-p capacity
+ v_test = v.sort.reverse
+p v_test[0..40]
+i = 0
+val = 0
+cap = 0
+while  cap <= 10000
+  val += v_test[-1-i][0]
+  cap += v_test[-1-i][1]
+  i   += 1
+end
+
 p "start"
-p max = v.map{|val| val[0]}.max
-p knapsack(capacity, v[1..-1], 0, 0)
-#p " the basic"
-#p knapsack(capacity, v_basic, 0, 0)
-#f_s_to_i = lambda{|v| v.map(&:to_i)}
-#v = f_s_to_i.call("79 32 47 18 26 85 33 40 45 59".split(" "))
-#w = f_s_to_i.call("85 26 48 21 22 95 43 45 55 52".split(" "))
-#v_web_example = []
-#p v
-#p w
-#v.each_with_index{|val,index| v_web_example.push([v[index], w[index]])}
-#p v_web_example
-#p knapsack(101, v_web_example, 0, 0)
+ans = 2493893
+capacity = v[0][0]
+v        = v[1..-1]
+p res =  knapsack(capacity, v, 0, 0)
+p ans - res[0]
+p " the basic"
+capacity = 6
+p knapsack(capacity, v_basic, 0, 0)
+f_s_to_i = lambda{|v| v.map(&:to_i)}
+v = f_s_to_i.call("79 32 47 18 26 85 33 40 45 59".split(" "))
+w = f_s_to_i.call("85 26 48 21 22 95 43 45 55 52".split(" "))
+v_web_example = []
+p v
+p w
+v.each_with_index{|val,index| v_web_example.push([v[index], w[index]])}
+p v_web_example
+p knapsack(101, v_web_example, 0, 0)
