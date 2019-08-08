@@ -51,16 +51,16 @@ p memo
     if memo.empty?
       rigth = (capacity >=  v[-1][1]) ? knapsack(capacity - v[-1][1], v[0..-2], memo) + v[-1][0] : 0
     else
-      rigth = (capacity >=  v[-1][1]) ? v[-1][0] : 0
-p "r"
+      aux = (capacity >=  v[-1][1]) ? v[-1][0] : 0
+      rigth = aux * 1
+      p "r"
 p memo[0] +  rigth
 p rigth
 p memo[0]
-      right = memo[0] + rigth
+     p right = memo[0] + aux
 p "m+r"
 p  rigth
 p "m+r"
-p rigth = 0
       #rigth = memo[0] + rigth
       #rigth = capacity > rigth ? rigth : memo[0]
       left = memo.pop
@@ -84,7 +84,7 @@ v_basic =
     [4,3]
   ]
 
-capacity = 6
+capacity = 5
 p res = knapsack(capacity, v_basic, [])
 #file = File.open("knapsack_test0.txt")
 #v = file.map{|ver| ver.gsub("\n", "").split(" ").map(&:to_i)}
