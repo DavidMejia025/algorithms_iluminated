@@ -19,12 +19,17 @@
 #      4.  [a,b]c          // A[3] = A[2] + c
 #      5.  [a,b,c]         // A[4] = max(A[3],A[2])
 #
+#                 [a,b,c,d]
+#         [a,b,c]                   [a,b,c]d
+#     [a,b]    [a,b] c        [a,b]d      [a,b]dc
+#  [a]   [a]b [a]c  [a]bc  [a]d  [a]bd [a]dc [a]bdc
+#
 #
 #                                              [a,b,c,d,e]
-#                 [a,b,c,d]                                              [a,b,c,d]e
-#         [a,b,c]                   [a,b,c]d                  [a,b,c]e                     [a,b,c]ed
-#     [a,b]    [a,b] c        [a,b]d      [a,b]dc       [a,b]e      [a,b]ec         [a,b]ed         [a,b]edc
-#  [a]   [a]b [a]c  [a,b]c  [a]d  [a]bd [a]dc [a]bdc   [a]e [a]eb [a]ec [a]ecb   [a]ed  [a]edb  [a]edc   [a]edcb
+ #                 [a,b,c,d]                                             [a,b,c,d]e
+ #         [a,b,c]                   [a,b,c]d                 [a,b,c]e                     [a,b,c]ed
+ #     [a,b]    [a,b] c        [a,b]d      [a,b]dc      [a,b]e      [a,b]ec         [a,b]ed         [a,b]edc
+ #  [a]   [a]b [a]c  [a]bc  [a]d  [a]bd [a]dc [a]bdc  [a]e [a]eb [a]ec [a]ecb   [a]ed  [a]edb  [a]edc   [a]edcb
 #
 #      1.  [a]             // A[0] = a
 #      2.  [a]b            // A[1] = A[0] + b
@@ -38,45 +43,46 @@
 #
 def knapsack(capacity, v, memo)
   if v.length == 1
-    a = ((capacity - v[0][1]) >= 0) ? v[0][0] : 0
+    a = ((capacity - v[0][1]) >= 0) ? [v[0][0], v[0][1]] : [0,0]
 
-    return knapsack(capacity, v[0], memo.push(a))
+    memo = memo.push(a)
+    return knapsack(capacity, v[0], memo)
   end
-p memo
+
   if memo.empty?
-    p "rec"
     left  = knapsack(capacity, v[0..-2], memo)
-p "reciii"
-p memo
+
     if memo.empty?
-      rigth = (capacity >=  v[-1][1]) ? knapsack(capacity - v[-1][1], v[0..-2], memo) + v[-1][0] : 0
+      right = (capacity >=  v[-1][1]) ? knapsack(capacity - v[-1][1], v[0..-2], memo) + v[-1][0] : 0
     else
-      aux = (capacity >=  v[-1][1]) ? v[-1][0] : 0
-      rigth = aux * 1
-      p "r"
-p memo[0] +  rigth
-p rigth
-p memo[0]
-     p right = memo[0] + aux
-p "m+r"
-p  rigth
-p "m+r"
-      #rigth = memo[0] + rigth
-      #rigth = capacity > rigth ? rigth : memo[0]
-      left = memo.pop
+
+      if ((capacity - memo[0][1]) - v[-1][1]) >= 0
+        right = [memo[0][0] + v[-1][0], memo[0][1]+ v[-1][1]]
+      elsif (capacity -  v[-1][1]) >= 0
+        right = [v[-1][0], v[-1][1]]
+      else
+        right = [0,0]
+      end
+
+      left  = memo.pop
     end
   else
-p "Else"
-  rigth =  (capacity >=  v[-1][1]) ? v[-1][0] : 0
 
-  rigth =   memo[0] + rigth
-  left  =  memo.pop
+    if (capacity -  v[-1]) >= 0
+      right = [v[0], v[1]]
+    else
+      right = [v[0],v[1]]
+    end
+    left  =  memo.pop
   end
-p "memo l r"
-  memo.push([left, rigth].max)
+
+  max_v = [left[0], right[0]].max
+  max_w =  (left[0] == max_v) ? left[1] : right[1]
+ "end"
+  memo.push([max_v, max_w])
 end
 
-v_basic =
+v_basic1 =
   [
     [3,4],
     [2,3],
@@ -84,8 +90,35 @@ v_basic =
     [4,3]
   ]
 
-capacity = 5
-p res = knapsack(capacity, v_basic, [])
+v_basic2 =
+  [
+    [4,3],
+    [3,4],
+    [2,3],
+    [4,2]
+  ]
+
+v_basic3 =
+  [
+    [4,2],
+    [4,3],
+    [3,4],
+    [2,3]
+  ]
+
+v_basic4 =
+  [
+    [2,3],
+    [4,2],
+    [4,3],
+    [3,4]
+  ]
+
+capacity =6
+p res = knapsack(capacity, v_basic1, [])
+p res = knapsack(capacity, v_basic2, [])
+p res = knapsack(capacity, v_basic3, [])
+p res = knapsack(capacity, v_basic4, [])
 #file = File.open("knapsack_test0.txt")
 #v = file.map{|ver| ver.gsub("\n", "").split(" ").map(&:to_i)}
 ##p v.length
