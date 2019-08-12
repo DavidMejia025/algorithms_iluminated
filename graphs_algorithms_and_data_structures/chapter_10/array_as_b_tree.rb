@@ -1,10 +1,32 @@
-class Arr_b_tree
+class ArrAsBTree
+  attr_accessor :array
   def initialize()
-    @a_b_t = []
+#avoid to use a_b_t readd clean code
+    @array = []
   end
 
   def add(element)
-    self.array.push(element)
+    @array.push(element)
+  end
+
+  def children_pos(parent)
+    [child_a_pos, child_b_pos]
+  end
+
+  def child_a_pos(parent)
+    2 * parent + 1
+  end
+
+  def child_b_pos(parent)
+    2 * parent + 2
+  end
+
+  def parent_pos(child)
+    return 0  if child == 0
+
+    factor = child.odd? ? (child / 2) : (child / 2) - 1
+
+    child - (child - factor)
   end
 
   def children(parent)
@@ -12,45 +34,35 @@ class Arr_b_tree
   end
 
   def child_a(parent)
-    child_pos = parent + parent + 1
-
-    [self.array[child_pos]]
+    [self.array[child_a_pos(parent)]]
   end
 
   def child_b(parent)
-    child_pos = parent + parent + 2
-
-    [self.array[child_pos]]
+    [self.array[child_b_pos(parent)]]
   end
 
   def parent(child)
-    return [self.array[0]] if child == 0
-
-    factor = child.odd? ? (child / 2) : (child / 2) - 1
-
-    position = child - (child - factor)
-
-    [self.array[position]]
+    [self.array[parent_pos(child)]]
   end
 end
-#
-#a_b_t = Arr_b_tree.new
-#p a_b_t
-#a_b_t.add(0)
-#a_b_t.add(1)
-#a_b_t.add(2)
-#a_b_t.add(3)
-#a_b_t.add(4)
-#a_b_t.add(5)
-#a_b_t.add(6)
-#a_b_t.add(7)
-#
-#p a_b_t
-#node = 1
-#p a_b_t.children_a(node)
-#p a_b_t.children_b(node)
-# p a_b_t.childrens(node)
-#nodes = 8.times.map do|num|
-#  p num
-#  p a_b_t.parent(num)
-#end
+
+a_b_t = ArrAsBTree.new
+p a_b_t
+a_b_t.add(0)
+a_b_t.add(1)
+a_b_t.add(2)
+a_b_t.add(3)
+a_b_t.add(4)
+a_b_t.add(5)
+a_b_t.add(6)
+a_b_t.add(7)
+
+p a_b_t
+node = 1
+p a_b_t.child_a(node)
+p a_b_t.child_b(node)
+ p a_b_t.children(node)
+nodes = 8.times.map do|num|
+  p num
+  p a_b_t.parent(num)
+end
