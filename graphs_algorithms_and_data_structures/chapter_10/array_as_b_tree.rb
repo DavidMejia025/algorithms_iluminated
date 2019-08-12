@@ -7,28 +7,28 @@ class Arr_b_tree
     self.array.push(element)
   end
 
-  def childrens(parent)
-    [children_a(parent), children_b(parent)].flatten
+  def children(parent)
+    [child_a(parent), child_b(parent)].flatten
   end
 
-  def children_a(parent)
-    children_pos = parent + parent + 1
+  def child_a(parent)
+    child_pos = parent + parent + 1
 
-    [self.array[children_pos]]
+    [self.array[child_pos]]
   end
 
-  def children_b(parent)
-    children_pos = parent + parent + 2
+  def child_b(parent)
+    child_pos = parent + parent + 2
 
-    [self.array[children_pos]]
+    [self.array[child_pos]]
   end
 
-  def parent(children)
-    return [self.array[0]] if children == 0
+  def parent(child)
+    return [self.array[0]] if child == 0
 
-    factor = children.odd? ? (children / 2) : (children / 2) - 1
+    factor = child.odd? ? (child / 2) : (child / 2) - 1
 
-    position = children - (children - factor)
+    position = child - (child - factor)
 
     [self.array[position]]
   end
