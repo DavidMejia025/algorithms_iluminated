@@ -1,5 +1,4 @@
-# Binary tree node implementation
-#
+# Breadth-first search
 #
 class BinaryTree
   def initialize
@@ -29,6 +28,44 @@ class BinaryTree
 
       return find_leave(next_node, queue)
     end
+  end
+
+  def bfs_tree
+    inner_bfs(@root, [], [])
+  end
+
+  def inner_bfs(node, bfs, queue)
+    bfs.push(node.val)
+
+    queue.push(node.l_ref) unless node.l_ref.nil?
+    queue.push(node.r_ref) unless node.r_ref.nil?
+
+    while !queue.empty?
+      next_node = queue.shift
+
+      return inner_bfs(next_node, bfs, queue)
+    end
+
+    return bfs
+  end
+
+  def find_last_leave
+    inner_bfs_node(@root, [], [])
+  end
+
+  def inner_bfs_node(node, bfs, queue)
+    bfs.push(node.val)
+
+    queue.push(node.l_ref) unless node.l_ref.nil?
+    queue.push(node.r_ref) unless node.r_ref.nil?
+
+    while !queue.empty?
+      next_node = queue.shift
+
+      return inner_bfs_node(next_node, bfs, queue)
+    end
+
+    return node
   end
 
   def valueAt(pos)
@@ -103,16 +140,27 @@ end
 b_tree = BinaryTree.new()
 p "start"
  b_tree.add(4)
+ b_tree.bfs_tree
+p "!!!"
  b_tree.add(2)
+ b_tree.bfs_tree
  b_tree.add(7)
+ b_tree.bfs_tree
+p "?????????"
  b_tree.add(1)
-p b_tree
- b_tree.add(3)
- b_tree.add(5)
- b_tree.add(6)
-p b_tree
+ b_tree
 p " !!!!!!!!!!!!!!!! "
-  b_tree.remove
-p b_tree
-  b_tree.remove
+ b_tree.add(3)
+p b_tree.bfs_tree
+p " 22!!!!!!!!!!!!!!!! "
+ b_tree.add(5)
+p " !!!!!!!!!!!!!!!! "
+ b_tree.add(6)
+p " $$$$"
+p b_tree.bfs_tree
+p "dfs"
+ b_tree.remove
+p b_tree.bfs_tree
+ b_tree.remove
+p b_tree.bfs_tree
 p b_tree
