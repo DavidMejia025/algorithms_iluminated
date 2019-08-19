@@ -32,16 +32,16 @@ class LinkedList
     return self.add(val) if pos == self.size
 
     if pos == 0
-      n_new     = Node.new(val,nil)
-      @root.ref = n_new
+      node      = find_node_by_pos(self.root, 0, 0)
+      n_new     = Node.new(val, node)
       @root     = n_new
     else
-      node          = find_node_by_pos(self.current, pos, self.size - 1)
-      new_node_prev = find_node_by_pos(self.current, pos - 1, self.size - 1)
+      node          = find_node_by_pos(self.root, pos, 0)
+      new_node_prev = find_node_by_pos(self.root, pos - 1, 0)
 
-      n_new    = Node.new(val, new_node_prev)
-      node.ref = n_new
-     end
+      n_new             = Node.new(val, node)
+      new_node_prev.ref = n_new
+    end
   end
 
   def replaceAt(pos, val)
@@ -49,7 +49,7 @@ class LinkedList
 
     return false if pos - 1 > length
 
-    node = find_node_by_pos(self.current, pos, length - 1)
+    node = find_node_by_pos(self.root, pos, 0)
 
     node.val = val
   end
@@ -59,18 +59,30 @@ class LinkedList
   end
 
   def removeAt(pos)
-    return false if pos < 0 || pos > self.size - 1
+    return false if pos < 0 || pos > self.size
 
-    return self.pop if pos == 0
+    if pos == self.size
+      last_node     = find_node_by_pos(self.root, pos - 1, 0)
+      new_last_node = find_node_by_pos(self.root, pos - 2, 0)
 
-    if pos == self.size - 1
-      poped    = @current.val
-      @current = @current.ref
+      new_last_node.ref = nil
+
+      poped =  last_node.val
+    elsif pos == 0
+      new_root = find_node_by_pos(self.root, 1, 0)
+
+      pop_element = @root
+      pop_element.ref = nil
+
+      @root = new_root
+
+      poped =  pop_element.val
     else
-      pop_node      = find_node_by_pos(self.current, pos, length - 1)
-      pop_node_next = find_node_by_pos(self.current, pos + 1, length - 1)
+      pop_node      = find_node_by_pos(self.root, pos, 0)
+      pop_node_next = find_node_by_pos(self.root, pos + 1, 0)
+      pop_node_prev = find_node_by_pos(self.root, pos - 1, 0)
 
-      pop_node_next.ref = pop_node_prev
+      pop_node_prev.ref = pop_node_next
       pop_node.ref      = nil
       poped             = pop_node.val
     end
@@ -82,18 +94,6 @@ class LinkedList
     return node if num == pos
 
     return find_node_by_pos(node.ref, pos, num += 1)
-  end
-
-  def pop
-    node_n_1 = find_n_1(self.current)
-
-    pop   = @root.val
-
-    @root = node_n_1
-
-    @root.ref = nil
-
-    pop
   end
 
   def find_n_1(node)
@@ -153,14 +153,14 @@ list.add('c');
 list.add('d');
 p "Show list:"
 p list
-#p "Add another element:"
-#list.addAt(2, 'e');
-#p "Show list:"
-#p list
+p "Add another element:"
+list.addAt(2, 'e');
+p "Show list:"
+p list
 p "Show first element:"
 p list.valueAt(0); #// 'a'
 p list.size
-#p "Remove the first element"
-#p list.removeAt(0);
-#p "Show list"
-#p list
+p "Remove the first element"
+p list.removeAt(3);
+p "Show list"
+p list
