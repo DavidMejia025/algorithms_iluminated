@@ -4,23 +4,26 @@
 class LinkedList
   def initialize
     @root    = nil
-    @current = nil
-  end
-
-  def current
-    @current
   end
 
   def add(val)
     if @root == nil
-      n_new    = Node.new(val,nil)
+      n_new = Node.new(val,nil)
 
-      @current = n_new
-      @root    = n_new
+      @root = n_new
     else
-      n_new    = Node.new(val, @current)
-      @current = n_new
+      n_new = Node.new(val, nil)
+
+      last_node = find_last_node(@root)
+
+      last_node.ref = n_new
     end
+  end
+
+  def find_last_node(node)
+    return node if node.ref == nil
+
+    find_last_node(node.ref)
   end
 
   def addAt(pos, val)
@@ -52,7 +55,7 @@ class LinkedList
   end
 
   def valueAt(pos)
-    find_node_by_pos(self.current, pos, (self.size) - 1).val
+    find_node_by_pos(self.root, pos, 0).val
   end
 
   def removeAt(pos)
@@ -78,7 +81,7 @@ class LinkedList
   def find_node_by_pos(node, pos, num)
     return node if num == pos
 
-    return find_node_by_pos(node.ref, pos, num -= 1)
+    return find_node_by_pos(node.ref, pos, num += 1)
   end
 
   def pop
@@ -100,9 +103,9 @@ class LinkedList
   end
 
   def size
-    return 0 if self.current == nil
+    return 0 if self.root == nil
 
-    node = self.current
+    node = self.root
 
     count(node)
   end
@@ -113,10 +116,9 @@ class LinkedList
     return count(node.ref) + 1
   end
 
-  private
-    def root
-      @root
-    end
+  def root
+    @root
+  end
 end
 
 class Node
@@ -147,16 +149,18 @@ p "Add some items to the list:"
 puts
 list.add('a');
 list.add('b');
+list.add('c');
 list.add('d');
 p "Show list:"
 p list
-p "Add another element:"
-list.addAt(2, 'c');
-p "Show list:"
-p list
+#p "Add another element:"
+#list.addAt(2, 'e');
+#p "Show list:"
+#p list
 p "Show first element:"
 p list.valueAt(0); #// 'a'
-p "Remove the first element"
-p list.removeAt(0);
-p "Show list"
-p list
+p list.size
+#p "Remove the first element"
+#p list.removeAt(0);
+#p "Show list"
+#p list

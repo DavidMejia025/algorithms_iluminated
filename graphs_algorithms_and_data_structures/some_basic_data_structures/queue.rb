@@ -16,7 +16,8 @@ class Queue
     @queue.push(element)
   end
 
-  def remove
+  def dequeue:w
+
     @queue.shift
   end
 
@@ -56,8 +57,3 @@ p valid = q1.find(2)
   if valid == false
 p   q1.show
   end
-#add 3 elements
-#  remove one element
-#  add two more elements
-#  remove one element
-#  search some element
