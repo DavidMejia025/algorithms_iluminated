@@ -1,8 +1,3 @@
-#Test driven development pleaseeeee eventhoug for the algorithms like this
-#
-# Quick Sort:
-#
-#
 # Quick sort is an algorithm developed by ...
 #
 # This algorithm is a mix between swaping (tend to remain in O(n) space) and divide and coquer
