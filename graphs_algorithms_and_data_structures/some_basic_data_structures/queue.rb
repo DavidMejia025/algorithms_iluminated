@@ -16,8 +16,7 @@ class Queue
     @queue.push(element)
   end
 
-  def dequeue:w
-
+  def dequeue
     @queue.shift
   end
 
@@ -57,3 +56,4 @@ p valid = q1.find(2)
   if valid == false
 p   q1.show
   end
+

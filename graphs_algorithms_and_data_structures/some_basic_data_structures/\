@@ -1,58 +1,54 @@
 # LinkedList data structucture that can be seen as a unidirectional graph where
 # each  vertex can have maximum two connections, and all the nodes are
 # connected "in-line" .
-class LinkedList
+class BinaryTree
   def initialize
-    @root    = nil
-    @current = nil
-  end
-
-  def current
-    @current
+    @root = nil
   end
 
   def add(val)
     if @root == nil
-      n_new    = Node.new(val,nil)
-
-      @current = n_new
-      @root    = n_new
+      @root = B_tree_node.new(val,nil, nil, nil)
     else
-      n_new    = Node.new(val, @current)
-      @current = n_new
+      parent = find_leave(@root, [])
+      n_new  = B_tree_node.new(val, parent, nil, nil)
+p "parent node"
+p parent
+      parent.add(n_new)
     end
   end
 
-  def addAt(pos, val)
-    return false if pos < 0 || pos > self.size
+  def find_leave(node, queue)
+    if node.l_ref == nil || node.r_ref == nil
+      p "node"
+      p node
+      p "node"
+      queue = []
+      return node
+    end
 
-    return self.add(val) if pos == self.size
+    queue.push(node.l_ref) unless node.l_ref.nil?
+    queue.push(node.r_ref) unless node.r_ref.nil?
 
-    if pos == 0
-      n_new     = Node.new(val,nil)
-      @root.ref = n_new
-      @root     = n_new
-    else
-      node          = find_node_by_pos(self.current, pos, self.size - 1)
-      new_node_prev = find_node_by_pos(self.current, pos - 1, self.size - 1)
+    while !queue.empty?
+      next_node = queue.shift
 
-      n_new    = Node.new(val, new_node_prev)
-      node.ref = n_new
-     end
-  end
-
-  def replaceAt(pos, val)
-    length = self.size
-
-    return false if pos - 1 > length
-
-    node = find_node_by_pos(self.current, pos, length - 1)
-
-    node.val = val
+      return find_leave(next_node, queue)
+    end
   end
 
   def valueAt(pos)
     find_node_by_pos(self.current, pos, (self.size) - 1).val
+  end
+
+  def remove
+    leave  = find_leave(@root)
+    parent = leave.p_ref
+
+    parente.l_ref = nil if parent.l_ref == leave
+    parente.r_ref = nil if parent.r_ref == leave
+
+    leave.p_ref = nil
   end
 
   def removeAt(pos)
@@ -86,9 +82,7 @@ class LinkedList
 
     pop   = @root.val
 
-
     @root = node_n_1
-
     @root.ref = nil
 
     pop
@@ -113,11 +107,23 @@ class LinkedList
 
     return count(node.ref) + 1
   end
+end
 
-class Node
-  def initialize(val, ref)
-    @val = val
-    @ref = ref
+class B_tree_node
+  attr_accessor :val, :p_ref, :l_ref, :r_ref
+
+  def initialize(val, p_ref, l_ref, r_ref)
+    @val   = val
+    @p_ref = p_ref
+    @l_ref = l_ref
+    @r_ref = r_ref
+  end
+
+  def add(node)
+    return self.l_ref = node if self.l_ref == nil
+    return self.r_ref = node if self.r_ref == nil
+
+    return false
   end
 
   def val=(val)
@@ -127,33 +133,15 @@ class Node
   def val
     @val
   end
-
-  def ref=(ref)
-    @ref = ref
-  end
-
-  def ref
-    @ref
-  end
 end
 
-list = LinkedList.new();
+b_tree = BinaryTree.new()
 
-p "Add some items to the list:"
-puts
-list.add('a');
-list.add('b');
-list.add('d');
-p "Show list:"
-p list
-p "Add another element:"
-list.addAt(2, 'c');
-p "Show list:"
-p list
-p "Show first element:"
-p list.valueAt(0); #// 'a'
-p "Remove the first element"
-p list.removeAt(0);
-p "Show list"
-
-p list
+p b_tree.add(9)
+p b_tree.add(8)
+p b_tree.add(3)
+p b_tree
+p "?????????"
+p b_tree.add(1)
+p b_tree
+p b_tree.add(4)

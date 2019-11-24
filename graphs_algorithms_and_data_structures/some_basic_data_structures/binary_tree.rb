@@ -1,3 +1,4 @@
+
 # Binary tree node implementation
 #
 #
@@ -30,7 +31,6 @@ class BinaryTree
       return find_leave(next_node, queue)
     end
   end
-
   def valueAt(pos)
     find_node_by_pos(self.current, pos, (self.size) - 1).val
   end
@@ -103,6 +103,7 @@ end
 b_tree = BinaryTree.new()
 p "start"
  b_tree.add(4)
+
  b_tree.add(2)
  b_tree.add(7)
  b_tree.add(1)
@@ -111,7 +112,6 @@ p b_tree
  b_tree.add(5)
  b_tree.add(6)
 p b_tree
-p " !!!!!!!!!!!!!!!! "
   b_tree.remove
 p b_tree
   b_tree.remove
