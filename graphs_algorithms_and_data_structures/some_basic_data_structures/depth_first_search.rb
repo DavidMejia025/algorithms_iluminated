@@ -1,4 +1,3 @@
-
 # Binary tree node implementation
 #
 #
@@ -31,12 +30,45 @@ class BinaryTree
       return find_leave(next_node, queue)
     end
   end
+
+  def dfs_tree_rec(*node)
+    node.empty? ? node = @root : node = node[0]
+
+    return [node.val] if node.l_ref.nil? && node.r_ref.nil?
+
+    left_side  = node.l_ref ? dfs_tree_rec(node.l_ref) : []
+    rigth_side = node.r_ref ? dfs_tree_rec(node.r_ref) : []
+
+    return (rigth_side + left_side + [node.val]).reverse if node == @root
+    return (rigth_side + left_side + [node.val])
+  end
+
+  def dfs_tree
+    inner_dfs(@root, [], [])
+  end
+
+  def inner_dfs(node, dfs, stack)
+    dfs.push(node.val)
+
+    stack.push(node.r_ref) unless node.r_ref.nil?
+    stack.push(node.l_ref) unless node.l_ref.nil?
+
+    while !stack.empty?
+
+      next_node = stack.pop
+
+      return inner_dfs(next_node, dfs, stack)
+    end
+
+    return dfs
+  end
+
   def valueAt(pos)
     find_node_by_pos(self.current, pos, (self.size) - 1).val
   end
 
   def remove
-    leave  = find_last_leave
+    leave  = find_leave(@root, [])
 
     parent = leave.p_ref
 
@@ -44,6 +76,7 @@ class BinaryTree
     parent.r_ref = nil if parent.r_ref == leave
 
     leave.p_ref = nil
+
     leave
   end
 
@@ -103,16 +136,23 @@ end
 b_tree = BinaryTree.new()
 p "start"
  b_tree.add(4)
-
  b_tree.add(2)
  b_tree.add(7)
  b_tree.add(1)
-p b_tree
  b_tree.add(3)
  b_tree.add(5)
  b_tree.add(6)
+p "binary tree"
 p b_tree
-  b_tree.remove
-p b_tree
-  b_tree.remove
-p b_tree
+p "dfs"
+p b_tree.dfs_tree
+p "dfs rec"
+p b_tree.dfs_tree_rec
+# b_tree.remove
+# b_tree.remove
+# b_tree.remove
+ b_tree.remove
+p "dfs"
+p b_tree.dfs_tree
+p "dfs rec"
+p b_tree.dfs_tree_rec

@@ -11,10 +11,6 @@ class LinkedList
     @current
   end
 
-  def root
-    @root
-  end
-
   def add(val)
     if @root == nil
       n_new    = Node.new(val,nil)
@@ -47,6 +43,7 @@ class LinkedList
 
   def replaceAt(pos, val)
     length = self.size
+
     return false if pos - 1 > length
 
     node = find_node_by_pos(self.current, pos, length - 1)
@@ -88,9 +85,10 @@ class LinkedList
     node_n_1 = find_n_1(self.current)
 
     pop   = @root.val
-p @root
+
+
     @root = node_n_1
-p @root
+
     @root.ref = nil
 
     pop
@@ -115,7 +113,6 @@ p @root
 
     return count(node.ref) + 1
   end
-end
 
 class Node
   def initialize(val, ref)
@@ -141,19 +138,22 @@ class Node
 end
 
 list = LinkedList.new();
+
+p "Add some items to the list:"
+puts
 list.add('a');
 list.add('b');
 list.add('d');
-p "1111111111"
+p "Show list:"
 p list
+p "Add another element:"
 list.addAt(2, 'c');
+p "Show list:"
 p list
-p "!!!!"
+p "Show first element:"
 p list.valueAt(0); #// 'a'
-
-# list.forEach((val, i) => {
-#   console.log(`Value at position ${i}: ${val}`);
-# });
-#
+p "Remove the first element"
 p list.removeAt(0);
+p "Show list"
+
 p list
