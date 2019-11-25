@@ -1,28 +1,23 @@
 #Weighted independent sets
 
-#
-#
 def wis(a, count)
   count += 1
   return a.max    if a == [280,618]
   return a[0]     if a.length == 1
 
   n = a.length - 1
-# count
+
   return [wis(a[0..(n-1)], count),  wis(a[0..(n-2)], count)+a[n]].max
 end
 
 
 def wis_dp_david(a, count)
   n = (a.length) - 1
-p "count"
-p count
+
   i,   wis_n   = wis_rule(a[0..n], count)
-p count
-p "---"
+
   i_1, wis_n_1 = wis_rule(a[0..(n-1)],count)
-p "count 2"
-  p count
+
    total_weigth_n   = wis_n + a[n]
    total_weigth_n_1 = wis_n_1 + a[n-1]
 
@@ -30,10 +25,8 @@ p "count 2"
 end
 
 def wis_rule(a, count)
-p "count wis rule"
-p count
-count = 5
-  p count
+  count = 5
+
   n = a.length - 1
 
   close = a[n-2]
@@ -58,13 +51,11 @@ def inner_wis(a, total_weigth, count)
 end
 
 def wis_dp_memoization(a, memo,  count)
-#  count += 1
-
   return memo.push(a.max)    if a.length == 2
   return memo.push(a[0])     if a.length == 1
 
   n = a.length - 1
-# count
+
   if memo.empty?
     return [wis(a[0..(n-1)], count),  wis(a[0..(n-2)], count)+a[n]].max
   else
@@ -83,21 +74,10 @@ def wis_bottom_up(a)
   return mwis[-1]
 end
 
-file = File.open("test0.txt")
-p file
-array = file.map{|num| num.gsub("\n", "").to_i}
-array =  array[1..(-1)]
-p array
-
-p wis(array, 0)
-p wis_dp_david(array, 0)
-p "---"
-p wis_dp_memoization(array, [], 0)
-p wis_bottom_up(array)
-
+#Test
 file = File.open("test.txt")
 
 array = file.map{|num| num.gsub("\n", "").to_i}
-array =  array[1..(-1)]
-p array.length
+array = array[1..(-1)]
+
 p wis_dp_david(array,0)

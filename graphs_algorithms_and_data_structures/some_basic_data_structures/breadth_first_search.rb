@@ -137,6 +137,7 @@ class B_tree_node
   end
 end
 
+#test
 b_tree = BinaryTree.new()
 p "start"
  b_tree.add(4)

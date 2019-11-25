@@ -31,9 +31,9 @@ class Queue
     node_n_1 = find_n_1(self.current)
 
     pop   = @root.val
-p @root
+
     @root = node_n_1
-p @root
+
     @root.ref = nil
 
     pop
@@ -83,6 +83,7 @@ class Node
   end
 end
 
+#Test
 s = Queue.new()
 p s.size
 p s.add(33)

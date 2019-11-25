@@ -72,6 +72,7 @@ class Node
   end
 end
 
+#test
 s = Stack.new()
 p s.size
 p s.add(33)

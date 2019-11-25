@@ -27,7 +27,7 @@ class Queue
   end
 end
 
-#TDD
+#Test
 p "create queue empty"
 q1 = Queue.new()
 p valid = q1.show == []
@@ -56,4 +56,3 @@ p valid = q1.find(2)
   if valid == false
 p   q1.show
   end
-

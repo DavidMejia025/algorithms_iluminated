@@ -74,34 +74,3 @@ p quick_sort(a_reverse,  0, a_reverse.length - 1)
 p quick_sort(a_median, 0, a_median.length - 1)
 # "--------------------"
 p quick_sort(a_sorted.shuffle, 0, a_sorted.length - 1)
-
-## Partition:
- # input:  array a of n disctint elements,
- # output: index of the pivot point
- #
- #Pseudo Code
- # (1) Set indexes i,j,k equal to 1
- # (2) pass all the array from k = 1 to length a
- #     (3) if a[k] is less than pivot increment.
- #         (4) if j is different from i  swap with the first
- #             element that is grater than pivote that element should
- #             be in j place.
- #         Increase i += 1 and j +=1.
- #     (5) if a[k] is grater than pivote increase j +=1
- #         always move j
- #
- #Manual test
- #  array       i    j
- #  4 3526      1    1
- #  4 35        1    2
- #  4 325       2    3
- #  4 3256      2    4
- #  2 3456      return 2
- #
- #  4 215378    1    1
- #  4 21        2    2
- #  4 215       2    3
- #  4 2135      3    4
- #  4 21357     3    5
- #  4 213578    3    6
- #  3 214578    return 3

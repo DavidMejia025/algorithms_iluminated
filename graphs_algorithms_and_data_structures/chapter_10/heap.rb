@@ -1,7 +1,6 @@
 require_relative "array_as_b_tree"
 # Binary tree node implementation plus BFS and DFS
-#
-#
+
 class Heap < ArrAsBTree
   attr_accessor :array
 
@@ -65,6 +64,7 @@ class Heap < ArrAsBTree
   end
 end
 
+#test
 p heap = Heap.new()
 p heap.class
 p heap.add(6)

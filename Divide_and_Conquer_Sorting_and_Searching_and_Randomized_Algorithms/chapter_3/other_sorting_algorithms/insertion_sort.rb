@@ -73,6 +73,7 @@ def reverse_array(a)
   a
 end
 
+#test
 a  = (1..100).map{|element| element| element}.shuffle
 p a
 p inversion_sort(a)

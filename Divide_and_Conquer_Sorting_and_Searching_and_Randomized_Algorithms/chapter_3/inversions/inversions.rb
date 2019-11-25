@@ -82,73 +82,10 @@ def divide(a, n)
   return a[0..(n-1)], a[n..-1]
 end
 
-
-# def divide(a, n)
-#   p a.length
-#   second_half_element = a.pop
-#
-#   return [a].push(second_half_element) if a.length == n + 0
-#
-#   return divide(a, n).push(second_half_element)
-# end
-
-
-a0        = [4,3,2,1,8,7,6,5]
-a         = [1,2,3,4,5,7,9,8].shuffle
-a1        = (1..8).map{|i| i}.reverse
-b         = [7,4]
-c         = [4,3,2,1]
-book_test =
-  [
-    54044,
-    14108,
-    79294,
-    29649,
-    25260,
-    60660,
-    2995,
-    53777,
-    49689,
-    9083
-
-   ]
-p book_test.length
-p "divide"
-p book_test
-# divide(book_test, book_test.length/2)
-p "-------------"
-
-# sorted_array = (1..5).map{|element| element}.reverse
-# sorted_array = book_test
-# sorted_array.count
-# num          = sorted_array.count
-# base         = Math.log(num,2).to_f.ceil
-# dif          = (2 ** base) - num
-# #sorted_array = sorted_array.sort
-# add_zeros    = (1..dif).map{|z| -z}.reverse
-# p sorted_array
-# sorted_array =  add_zeros+sorted_array
-# #sorted_array +=  add_zeros
-# p sorted_array
-# array = sorted_array
-# p array.count
-# "theorical num of inversions"
-# array = (1..16).map{|num| num}.reverse
-# array.length * ((array.length) -1) / 2
-#p array = [4,5,1,2,3]
-#p divide(array, array.length/2)
-# merge_count_inversions({array: array, inversions: 0})
+#Test
 my_file = File.open("inversions_test.txt")
 array = my_file.map do |li|
   li.gsub("\n","").to_i
 end
 
-p array.length
-# "Reat test"
-# num        = array.count
-#  "theorical num of inversions"
-# array.length * ((array.length) -1) / 2
-# merge_count_inversions({array: array, inversions: 0})
-# "real test result"
 p merge_count_inversions({array: array, inversions: 0})[:inversions]
-#

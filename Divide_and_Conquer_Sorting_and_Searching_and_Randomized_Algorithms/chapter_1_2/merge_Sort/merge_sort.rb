@@ -73,6 +73,8 @@ def divide(a, n)
   return divide(a, n).push(second_half_element)
 end
 
+#test
+
 a = [1,2,3,4,5,6,7,8].shuffle
 b = [7,4,3,1,0,0,0,0]
 
@@ -81,4 +83,3 @@ c = [4,3,2,1]
 p merge_sort(a)
 p merge_sort(b)
 p merge_sort(c)
-

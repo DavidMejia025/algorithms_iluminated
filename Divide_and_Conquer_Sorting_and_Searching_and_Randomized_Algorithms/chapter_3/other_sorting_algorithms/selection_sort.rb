@@ -57,5 +57,6 @@ def pop_k(a,i)
   return a, element
 end
 
+#test
 a = (1..10).map{|num| num}.shuffle
 p selection_sort(a)

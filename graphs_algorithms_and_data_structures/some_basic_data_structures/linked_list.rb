@@ -86,9 +86,7 @@ class LinkedList
 
     pop   = @root.val
 
-
-    @root = node_n_1
-
+    @root     = node_n_1
     @root.ref = nil
 
     pop
@@ -137,6 +135,7 @@ class Node
   end
 end
 
+#Test
 list = LinkedList.new();
 
 p "Add some items to the list:"

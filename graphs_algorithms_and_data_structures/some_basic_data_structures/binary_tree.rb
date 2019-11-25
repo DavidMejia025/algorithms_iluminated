@@ -99,7 +99,7 @@ class B_tree_node
     @val
   end
 end
-
+# Test
 b_tree = BinaryTree.new()
 p "start"
  b_tree.add(4)

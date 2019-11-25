@@ -1,7 +1,6 @@
 class ArrAsBTree
   attr_accessor :array
   def initialize()
-#avoid to use a_b_t readd clean code
     @array = []
   end
 
@@ -46,6 +45,7 @@ class ArrAsBTree
   end
 end
 
+#test
 a_b_t = ArrAsBTree.new
 p a_b_t
 a_b_t.add(0)

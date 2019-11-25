@@ -144,6 +144,8 @@ class Node
   end
 end
 
+#test
+
 list = LinkedList.new();
 p "Add some items to the list:"
 puts

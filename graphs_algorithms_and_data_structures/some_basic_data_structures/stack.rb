@@ -31,7 +31,7 @@ class Stack
   end
 end
 
-#TDD
+#Test
 p "create stack empty"
 q1 = Stack.new()
 p valid = q1.show == []

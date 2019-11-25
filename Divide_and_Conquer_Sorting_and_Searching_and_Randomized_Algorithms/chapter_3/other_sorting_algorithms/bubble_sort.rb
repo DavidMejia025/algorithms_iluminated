@@ -82,6 +82,7 @@ def swap_reverse(a,i)
   a[i-1] = aux
 end
 
+#test
 a = (1..10).map{|num| num}.reverse
 bubble_sort(a)
 p a
@@ -93,4 +94,3 @@ a = a.reverse
 p a
 cocktail_shaker_sort(a)
 p a
-
